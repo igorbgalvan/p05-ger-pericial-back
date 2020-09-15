@@ -44,7 +44,29 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
-        $this->loadComponent('Flash');
+        $this->response->type('application/json');
+
+        $this->loadComponent('Auth', [
+            'storage' => 'Memory',
+            'authenticate' => [
+                'Form' => [
+                    'userModel' => 'Users',
+                    'fields' => [
+                        'username' => 'email',
+                        'password' => 'senha'
+                    ],
+                ],
+                'ADmad/JwtAuth.Jwt' => [
+                    'userModel' => 'Users',
+                    'fields' => [
+                        'username' => 'email'
+                    ],
+                    'parameter' => 'token',
+                    'queryDatasource' => true,
+                ]
+            ],
+            'unauthorizedRedirect' => false,
+        ]);
 
         /*
          * Enable the following component for recommended CakePHP security settings.
