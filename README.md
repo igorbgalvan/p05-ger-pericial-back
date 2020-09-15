@@ -1,51 +1,59 @@
-# CakePHP Application Skeleton
+
+# Gerenciador Pericial
 
 [![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
 [![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
+O projeto começa pelo desenvolvimento de um Sistema Web, onde terão as funcionalidades de cadastro, atualização e exclusão de usuários, distribuição de tarefas, histórico de alteração, calendário de plantões, geração de relatórios específicos, função de filtro de busca, anexo de documentos por parte dos peritos, alteração e exclusão e cadastro de laudos.
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
 
-## Installation
+## Pré-requisitos
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+Antes de iniciar, certifique-se de cumprir os seguintes requisitos:
+<!--- Estes são alguns exemplos de requisitos. Adicione, duplique e remove como necessário --->
+* Você deve possuir a última versão do PHP, HTML, JavaScript e CSS instalado.
+* Você deve possuir uma máquina Linux ou Windows (Lembrando que o sistema foi feito todo em Linux).
+* Você deve ler o https://www.php.net/manual/pt_BR/ dos termos de uso do PHP.
+* Você deve ler o https://dev.w3.org/html5/html-author/ dos termos de uso do HTML 5.
+* Você deve ler o https://www.w3schools.com/cssref/ dos termos de uso do CSS 3.
+* Você deve possuir o composer na versão 1.6.3 https://getcomposer.org/download/
+* Você deve possuir a versão 3.x do CakePHP https://book.cakephp.org/3/en/index.html
 
-If Composer is installed globally, run
+## Como executar
 
-```bash
-composer create-project --prefer-dist cakephp/app
+Para fazer o deploy da aplicação siga os seguintes passos:
+
+Linux:
+```
+* Passo a passo do nosso ambiente:
+ - Instale o xampp;
+ - Inicialize o xamppp usando 'sudo /opt/lampp/xampp start';
+ - Acesse localhost/phpmyadmin
+ - Crie um banco de dados;
+
+* Para fins de teste, o banco de dados utilizado foi o mySQL.
+* (Feito em ambiente unix - Ubuntu)
+sudo apt-get install php-mysql
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+## Usando Gerenciador pericial
 
-```bash
-composer create-project --prefer-dist cakephp/app myapp
-```
+Para usar Gerenciador pericial, estas são as opções:
+* Abra o navegador e digite o endereço explicitado pelo seu servidor.
+* Ao abrir a aplicação você poderá:
+  * TESTE TESTE TESTE TESTE
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+## Evolução da Aplicação
+* Primeira Sprint
+    * Base inicial
 
-```bash
-bin/cake server -p 8765
-```
+## Contribuidores
 
-Then visit `http://localhost:8765` to see the welcome page.
+As seguintes pessoas contribuiram para este projeto:
 
-## Update
+* Igor Galvan (https://github.com/igorbgalvan)
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+## Licença de uso
 
-## Configuration
+Este é um projeto privado com direitos reservados para a Universidade Federal do Mato Grosso do Sul.
 
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
-
-## Layout
-
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
