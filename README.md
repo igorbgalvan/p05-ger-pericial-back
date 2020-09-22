@@ -29,6 +29,9 @@ Linux:
  - Inicialize o xamppp usando 'sudo /opt/lampp/xampp start';
  - Acesse localhost/phpmyadmin
  - Crie um banco de dados;
+ - Dê um git clone do projeto;
+ - User o comando 'composer install';
+ - Acesse localhost;
 
 * Para fins de teste, o banco de dados utilizado foi o mySQL.
 * (Feito em ambiente unix - Ubuntu)
