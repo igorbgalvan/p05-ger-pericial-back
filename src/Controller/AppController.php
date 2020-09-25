@@ -53,7 +53,7 @@ class AppController extends Controller
                     'userModel' => 'Users',
                     'fields' => [
                         'username' => 'email',
-                        'password' => 'senha'
+                        'password' => 'password'
                     ],
                 ],
                 'ADmad/JwtAuth.Jwt' => [

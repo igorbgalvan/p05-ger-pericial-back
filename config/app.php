@@ -264,7 +264,7 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => 'root',
-            'password' => '5plGSztsdK',
+            'password' => '',
             'database' => 'p05ger',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
@@ -307,7 +307,7 @@ return [
             'host' => 'localhost',
             //'port' => 'non_standard_port_number',
             'username' => 'root',
-            'password' => '5plGSztsdK',
+            'password' => '',
             'database' => 'p05ger',
             //'encoding' => 'utf8mb4',
             'timezone' => 'UTC',
