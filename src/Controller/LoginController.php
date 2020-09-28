@@ -46,10 +46,4 @@ class LoginController extends AppController
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
-
-
-    public function register()
-    {
-        
-    }
 }
