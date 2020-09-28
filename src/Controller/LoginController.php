@@ -20,13 +20,6 @@ class LoginController extends AppController
         $this->Auth->allow(['login']);
     }
 
-    function test()
-    {
-       $data = $this->Auth->user();
-       $this->set(compact('data'));
-       $this->set('_serialize', 'data');
-    }
-
     public function login()
     {
         if ($this->request->is('post')) {
@@ -52,5 +45,11 @@ class LoginController extends AppController
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
+    }
+
+
+    public function register()
+    {
+        
     }
 }
