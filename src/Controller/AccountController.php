@@ -17,37 +17,13 @@ class AccountController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['createAccount']);
+        $this->Auth->allow(['lostAccount']);
     }
-
-    public function createAccount()
+    public function lostAccount()
     {
-        $Users = TableRegistry::getTableLocator()->get('Users');
-        $user = $Users->newEntity();
         if ($this->request->is('post')) {
-            $user = $Users->patchEntity($user, $this->request->getData());
-
-            if ($Users->save($user)) {
-                $this->response->statusCode('200');
-                $data = [
-                    'message' => 'Conta criada com sucesso!',
-                ];
-            }
-            else
-            {
-                $this->response->statusCode('400');
-                $data = [
-                    'message' => 'The request needs to be post'
-                ];
-            }
-        } else {
-            $this->response->statusCode('400');
-            $data = [
-                'message' => 'The request needs to be post'
-            ];
+            var_dump($this->request->getData());
+            die();
         }
-
-        $this->set(compact('data'));
-        $this->set('_serialize', 'data');
     }
 }

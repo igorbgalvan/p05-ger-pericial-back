@@ -29,11 +29,14 @@ class UsersTable extends AbstractMigration
                 'default' => 'CURRENT_TIMESTAMP',
                 'null' => true,
             ])
+            ->addColumn('confirmation', 'boolean', [
+                'default' => '0',
+            ])
             ->addForeignKey('role_id', 'roles', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
             ->create();
 
         $builder = $this->getQueryBuilder();
-        $builder->insert(['email', 'password', 'name', 'position', 'phone', 'role_id'])
+        $builder->insert(['email', 'password', 'name', 'position', 'phone', 'confirmation', 'role_id'])
             ->into('users')
             ->values([
                 'email' => 'admin@admin.com',
@@ -42,6 +45,7 @@ class UsersTable extends AbstractMigration
                 'phone'=>'9999999999',
                 'password' => '$2y$10$oZ/xwh/94SYKzir76oV9CuTVw.Qi9CwViQCqYh5/MDPvhvzXQKG/i',
                 'role_id' => '2',
+                'confirmation' => "1",
             ])
             ->execute();
     }

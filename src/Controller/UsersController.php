@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
 
 /**
@@ -26,15 +28,99 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function viewUnUsers($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => ['Roles'],
-        ]);
+        if ($this->Auth->user('role_id') == 2) {
+            if ($this->Auth->user('confirmation') == true) {
+                $user = $this->Users->find('all', [
+                    'conditions' => ['confirmation' => 0]
+                ]);
 
-        $this->set('user', $user);
+                $this->response->statusCode('200');
+                $data = ['user' => $user];
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'You need someone authorize your request.'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'You are not a Admin'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
+
+    public function viewUsers($id = null)
+    {
+        if ($this->Auth->user('confirmation') == true) {
+            $user = $this->Users->find('all');
+
+            $data = ['user' => $user];
+            $this->response->statusCode('200');
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'You need someone authorize your request.'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function authorizeUser($id = null)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        if (true) {
+            if ($this->Auth->user('role_id') == 2) {
+                if ($this->Auth->user('confirmation') == true) {
+                    $id = $this->request->getData('id');
+                    $user = $this->Users->find('all', [
+                        'conditions' => ['id' => $id]
+                    ])->first();
+
+                    if ($user) {
+
+                        if ($user->confirmation == false) {
+
+                            $user->confirmation = true;
+
+                            if ($this->Users->save($user)) {
+                                $this->response->statusCode('200');
+                                $data = ['message' => 'the ' . $user->email . ' has been authorized.'];
+                            } else {
+                                $errors = $user->getErrors();
+                                $this->response->statusCode('400');
+                                $data = [
+                                    'message' => 'Error while saving.',
+                                    'error' => $errors
+                                ];
+                            }
+                        } else {
+                            $data = [
+                                'message' => 'This users is already authorized.',
+                            ];
+                        }
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'This user is not valid.'];
+                    }
+                } else {
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'You need someone authorize your request.'];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'You are not a Admin'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'the request needs to be post or put'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
     /**
      * Add method
      *
@@ -48,12 +134,12 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been saved.'];
-            }
-            else
-            {
+            } else {
+                $errors = $user->getErrors();
                 $this->response->statusCode('400');
                 $data = [
-                    'message' => 'Error while saving.'
+                    'message' => 'Error while saving.',
+                    'error' => $errors
                 ];
             }
         } else {
@@ -75,20 +161,36 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        $this->request->allowMethod(['post', 'put']);
+
+
+        $id = $this->request->getData('id');
+        $user = $this->Users->find('all', [
+            'conditions' => ['id' => $id]
+        ])->first();
+
+        if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $this->response->statusCode('200');
+                $this->Auth->setUser($user);
+                $data = ['message' => 'The user has been saved.'];
+            } else {
+                $errors = $user->getErrors();
+                $this->response->statusCode('400');
+                $data = [
+                    'message' => 'Error while saving.',
+                    'error' => $errors
+                ];
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        } else {
+            $this->response->statusCode('400');
+            $data = [
+                'message' => 'Login on your account to edit profile'
+            ];
         }
-        $roles = $this->Users->Roles->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'roles'));
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     /**

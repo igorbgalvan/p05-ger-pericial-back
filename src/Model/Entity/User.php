@@ -37,6 +37,7 @@ class User extends Entity
         'position' => true,
         'phone' => true,
         'role_id' => true,
+        'confirmation' => true,
         'created' => true,
         'modified' => true,
         'role' => true,
