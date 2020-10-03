@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
+use Cake\Utility\Security;
 
 /**
  * Users Controller
@@ -172,9 +173,13 @@ class UsersController extends AppController
         if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->response->statusCode('200');
-                $this->Auth->setUser($user);
-                $data = ['message' => 'The user has been saved.'];
+                $this->response->statusCode('200');  
+                $this->Auth->setUser($user); 
+                $user['token'] = \Firebase\JWT\JWT::encode(['sub' => $user['email'], 'exp' => time() + 3600], Security::salt());             
+                $data = [
+                    'message' => 'The user has been saved.',
+                    'token' => $user
+                ];
             } else {
                 $errors = $user->getErrors();
                 $this->response->statusCode('400');
