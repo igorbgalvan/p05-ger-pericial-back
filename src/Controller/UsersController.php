@@ -170,12 +170,22 @@ class UsersController extends AppController
             'conditions' => ['id' => $id]
         ])->first();
 
+
+
         if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $data = $this->request->getData();
+
+            if ($user->role_id == 1)
+                $data['role_id'] = 1;
+            if ($user->confirmation == true)
+                $data['confirmation'] = 1;
+
+
+            $user = $this->Users->patchEntity($user, $data);
             if ($this->Users->save($user)) {
-                $this->response->statusCode('200');  
-                $this->Auth->setUser($user); 
-                $user['token'] = \Firebase\JWT\JWT::encode(['sub' => $user['email'], 'exp' => time() + 3600], Security::salt());             
+                $this->response->statusCode('200');
+                $this->Auth->setUser($user);
+                $user['token'] = \Firebase\JWT\JWT::encode(['sub' => $user['email'], 'exp' => time() + 3600], Security::salt());
                 $data = [
                     'message' => 'The user has been saved.',
                     'token' => $user
