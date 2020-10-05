@@ -32,11 +32,16 @@ class UsersTable extends AbstractMigration
             ->addColumn('confirmation', 'boolean', [
                 'default' => '0',
             ])
+            ->addColumn('profile_picture', 'string', [
+                'null' => true,
+                'default' => null,
+                'limit' => 60,
+            ])
             ->addForeignKey('role_id', 'roles', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
             ->create();
 
         $builder = $this->getQueryBuilder();
-        $builder->insert(['email', 'password', 'name', 'position', 'phone', 'confirmation', 'role_id'])
+        $builder->insert(['email', 'password', 'name', 'position', 'phone', 'confirmation', 'role_id', 'profile_picture'])
             ->into('users')
             ->values([
                 'email' => 'admin@admin.com',
