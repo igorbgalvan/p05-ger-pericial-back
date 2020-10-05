@@ -187,7 +187,6 @@ class UsersController extends AppController
                 $user = $this->Users->patchEntity($user, $data);
                 if ($this->Users->save($user)) {
                     $this->response->statusCode('200');
-                    $user['token'] = $this->Auth->user('token');
                     $this->Auth->setUser($user);
 
                     $data = [
