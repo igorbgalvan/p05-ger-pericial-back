@@ -190,6 +190,7 @@ class UsersController extends AppController
                     $this->Auth->setUser($user);
                     $data = [
                         'message' => 'The user has been saved.',
+                        'user' => $user
                     ];
                 } else {
                     $errors = $user->getErrors();
@@ -225,13 +226,26 @@ class UsersController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
+        $id = $this->request->getData('id');
         $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+        if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
+            if ($this->Users->delete($user)) {
+                $this->response->withStatus(200);
+                $data = ['message' => 'The user has been deleted.'];
+            } else {
+                $this->response->statusCode('400');
+                $data = [
+                    'message' => 'The user could not be deleted. Please, try again.'
+                ];
+            }
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->response->statusCode('400');
+            $data = [
+                'message' => 'you need to be an admin or logged on your account.'
+            ];
         }
 
-        return $this->redirect(['action' => 'index']);
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 }

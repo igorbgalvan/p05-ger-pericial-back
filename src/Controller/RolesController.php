@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -45,9 +46,7 @@ class RolesController extends AppController
             if ($this->Roles->save($role)) {
                 $this->response->withStatus(200);
                 $data = ['message' => 'The role has been saved.'];
-            }
-            else
-            {
+            } else {
                 $this->response->statusCode('400');
                 $data = [
                     'message' => 'The role could not be saved. Please, try again.'
@@ -99,13 +98,20 @@ class RolesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->getData('id');
         $role = $this->Roles->get($id);
-        if ($this->Roles->delete($role)) {
-            $this->response->withStatus(200);
-            $data = ['message' => 'The role has been deleted.'];
+        if ($this->Auth->user('role_id') == 2) {
+            if ($this->Roles->delete($role)) {
+                $this->response->withStatus(200);
+                $data = ['message' => 'The role has been deleted.'];
+            } else {
+                $this->response->statusCode('400');
+                $data = [
+                    'message' => 'The role could not be deleted. Please, try again.'
+                ];
+            }
         } else {
             $this->response->statusCode('400');
             $data = [
-                'message' => 'The role could not be saved. Please, try again.'
+                'message' => 'you need to be an admin.'
             ];
         }
 
