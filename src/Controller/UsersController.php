@@ -201,7 +201,7 @@ class UsersController extends AppController
                 $data = [
                     'message' => 'Error while saving.',
                     'error' => $errors,
-                    'user' => $user
+                    'user' => (array) $user
                 ];
             }
         } else {
