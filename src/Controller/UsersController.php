@@ -92,7 +92,7 @@ class UsersController extends AppController
             if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
                  $user['profile_picture'] = uniqid() . rand(10, 99) . '.' . $picture_ext;
                  if ($this->Users->save($user)) {
-                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->getData());
+                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->getData('profile_picture'));
                     $data = ['message' => 'The image has been saved.'];
                 } else {
                     $this->response->statusCode('400');

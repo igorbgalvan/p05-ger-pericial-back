@@ -24,7 +24,6 @@ class UploadComponent extends Component
         $file_tmp_name = end($file_tmp_name);
 
         if (is_uploaded_file($file_tmp_name)) {
-            die('uploded');
             move_uploaded_file($file_tmp_name, $dir . DS . $uniqName);
         }
     }
