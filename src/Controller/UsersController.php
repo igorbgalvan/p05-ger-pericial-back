@@ -127,6 +127,61 @@ class UsersController extends AppController
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
+
+
+    public function authorizeUser($id = null)
+    {
+        $this->request->allowMethod(['post', 'put']);
+        if (true) {
+            if ($this->Auth->user('role_id') == 2) {
+                if ($this->Auth->user('confirmation') == true) {
+                    $id = $this->request->getData('id');
+                    $user = $this->Users->find('all', [
+                        'conditions' => ['id' => $id]
+                    ])->first();
+
+                    if ($user) {
+
+                        if ($user->role_id == 1) {
+
+                            $user->role_id = 2;
+
+                            if ($this->Users->save($user)) {
+                                $this->response->statusCode('200');
+                                $data = ['message' => 'the ' . $user->email . ' has been promoted.'];
+                            } else {
+                                $errors = $user->getErrors();
+                                $this->response->statusCode('400');
+                                $data = [
+                                    'message' => 'Error while saving.',
+                                    'error' => $errors
+                                ];
+                            }
+                        } else {
+                            $data = [
+                                'message' => 'This users is already an admin.',
+                            ];
+                        }
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'This user is not valid.'];
+                    }
+                } else {
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'You need someone authorize your request.'];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'You are not a Admin'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'the request needs to be post or put'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
     /**
      * Add method
      *
