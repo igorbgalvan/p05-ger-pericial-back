@@ -129,7 +129,7 @@ class UsersController extends AppController
     }
 
 
-    public function authorizeUser($id = null)
+    public function promoteUser($id = null)
     {
         $this->request->allowMethod(['post', 'put']);
         if (true) {
