@@ -100,7 +100,8 @@ class UsersController extends AppController
             
                 } else {
                 $this->response->statusCode('400');
-                $data = ['message' => 'File extension not allowed.'];
+                $data = ['message' => 'File extension not allowed.',
+                         'extension' =>  $picture_ext  ];
             }
         } else {
             $this->response->statusCode('400');
