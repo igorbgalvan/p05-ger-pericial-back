@@ -18,11 +18,6 @@ use Cake\Utility\Security;
  */
 class UsersController extends AppController
 {
-    public function initialize()
-    {
-        parent::initialize();
-        $this->loadComponent('Upload');
-    }
 
     public function beforeFilter(Event $event)
     {
@@ -71,42 +66,6 @@ class UsersController extends AppController
         } else {
             $this->response->statusCode('400');
             $data = ['message' => 'You need someone authorize your request.'];
-        }
-
-        $this->set(compact('data'));
-        $this->set('_serialize', 'data');
-    }
-
-    public function updateImage()
-    {
-
-        $this->request->allowMethod(['post']);
-        $id = $this->request->getData('id');
-        $id = (int) $id;
-        if ($this->Auth->user('id') == $id) {
-
-            $user = $this->Users->get($id);
-
-            $picture_ext = pathinfo($this->request->getData("name"), PATHINFO_EXTENSION);
-
-            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
-                 $user['profile_picture'] = uniqid() . rand(10, 99) . '.' . $picture_ext;
-                 if ($this->Users->save($user)) {
-                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->getData());
-                    $data = ['message' => 'The image has been saved.'];
-                } else {
-                    $this->response->statusCode('400');
-                    $data = ['message' => 'Something got wrong.'];
-                }
-            
-                } else {
-                $this->response->statusCode('400');
-                $data = ['message' => 'File extension not allowed.',
-                         'extension' =>  $picture_ext  ];
-            }
-        } else {
-            $this->response->statusCode('400');
-            $data = ['message' => 'This user is not valid.'];
         }
 
         $this->set(compact('data'));
