@@ -17,7 +17,7 @@ class Tokens extends AbstractMigration
         $table = $this->table('tokens');
         $table->addColumn('user_id', 'integer')
             ->addColumn('token', 'string', ['limit' => 255])
-            ->addColumn('expiration', 'datetime')
+            ->addColumn('expiration', 'integer')
             ->addForeignKey('user_id', 'users', 'id', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
             ->create();
     }
