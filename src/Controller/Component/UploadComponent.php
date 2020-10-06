@@ -20,6 +20,9 @@ class UploadComponent extends Component
         $file_tmp_name = $data['tmp_name'];
         $filename = $data['name'];
 
+        $file_tmp_name = explode('/',$file_tmp_name);
+        $file_tmp_name = end($file_tmp_name);
+
         if (is_uploaded_file($file_tmp_name)) {
             die('uploded');
             move_uploaded_file($file_tmp_name, $dir . DS . $uniqName);
