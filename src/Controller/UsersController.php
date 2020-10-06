@@ -79,8 +79,7 @@ class UsersController extends AppController
 
     public function updateImage()
     {
-        var_dump($this->request->getData("name"));
-        die();
+
         $this->request->allowMethod(['post']);
         $id = $this->request->getData('id');
         $id = (int) $id;
@@ -88,12 +87,14 @@ class UsersController extends AppController
 
             $user = $this->Users->get($id);
 
-            $picture_ext = pathinfo($this->request->data['profile_picture'][0]['name'], PATHINFO_EXTENSION);
+            $picture_ext = pathinfo($this->request->getData("name"), PATHINFO_EXTENSION);
+            var_dump($this->request->getData("picture_ext"));
+            die();
 
             if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
                  $user['profile_picture'] = uniqid() . rand(10, 99) . '.' . $picture_ext;
                  if ($this->Users->save($user)) {
-                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->data['profile_picture'][0]);
+                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->getData());
                     $data = ['message' => 'The image has been saved.'];
                 } else {
                     $this->response->statusCode('400');
