@@ -88,7 +88,7 @@ class UsersController extends AppController
             $user = $this->Users->get($id);
 
             $picture_ext = pathinfo($this->request->getData("name"), PATHINFO_EXTENSION);
-            var_dump($this->request->getData("picture_ext"));
+            echo $this->request->getData("picture_ext");
             die();
 
             if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
