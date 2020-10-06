@@ -15,8 +15,6 @@ class UploadComponent extends Component
 
     public function uploadFile($folder, $uniqName, $data)
     {
-        var_dump($data);
-        die();
         $dir = WWW_ROOT . 'files' . DS . $folder;
 
         $file_tmp_name = $data['tmp_name'];
