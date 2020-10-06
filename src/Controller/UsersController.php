@@ -79,7 +79,7 @@ class UsersController extends AppController
 
     public function updateImage()
     {
-        var_dump($this->request->getData());
+        var_dump($this->request->getData("name"));
         die();
         $this->request->allowMethod(['post']);
         $id = $this->request->getData('id');
