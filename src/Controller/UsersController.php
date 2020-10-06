@@ -59,7 +59,9 @@ class UsersController extends AppController
     public function viewUsers($id = null)
     {
         if ($this->Auth->user('confirmation') == true) {
-            $user = $this->Users->find('all');
+            $user = $this->Users->find('all', [
+                'conditions' => ['confirmation' => 1]
+            ]);
 
             $data = ['user' => $user];
             $this->response->statusCode('200');
