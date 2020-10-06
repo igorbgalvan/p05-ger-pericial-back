@@ -45,7 +45,7 @@ class AccountController extends AppController
                     $email->to($user->email)
                         ->subject('Alteração de senha - Gerenciador Pericial')
                         ->emailFormat('html')
-                        ->viewVars(['confirm_email_token' => $tokenCode, 'account_id' => $user->id, 'account_name' => $user->name])
+                        ->viewVars(['confirm_email_token' => $tokenCode, 'account_id' => $user->id, 'account_email' => $user->email, 'account_name' => $user->name])
                         ->template('pass_recover')
                         ->send();
 

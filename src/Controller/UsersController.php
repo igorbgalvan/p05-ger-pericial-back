@@ -64,9 +64,9 @@ class UsersController extends AppController
             ]);
 
             $data = ['user' => $user];
-            $this->response->statusCode('200');
+            $this->response = $this->response->withStatus(200);
         } else {
-            $this->response->statusCode('400');
+            $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize your request.'];
         }
 
@@ -200,7 +200,8 @@ class UsersController extends AppController
                 $this->response->statusCode('400');
                 $data = [
                     'message' => 'Error while saving.',
-                    'error' => $errors
+                    'error' => $errors,
+                    'user' => $user
                 ];
             }
         } else {
