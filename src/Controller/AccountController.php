@@ -99,6 +99,8 @@ class AccountController extends AppController
 
     public function changePass()
     {
+        var_dump($this->request->getData());
+        die();
         if ($this->request->is('post')) {
             $data = $this->request->getData();
             $Tokens = TableRegistry::getTableLocator()->get('Tokens');
@@ -109,6 +111,8 @@ class AccountController extends AppController
             $tokenCode = $data['tokenCode'];
             $password = $data['password'];
             $user = $Users->get($id);
+
+            var_dump($this->request->getData());
 
 
             if ($user) {
