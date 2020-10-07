@@ -37,7 +37,7 @@ class AccountController extends AppController
             if ($user) {
                 $token = $Tokens->find('all', [
                     'conditions' => ['user_id' => $id]
-                ])->first();
+                ])->order(['expiration' => 'DESC'])->first();
 
 
                 if ($token) {
