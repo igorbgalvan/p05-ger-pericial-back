@@ -42,37 +42,41 @@ class AccountController extends AppController
 
                 if ($token) {
 
-                    var_dump($token->token);
-                    var_dump(password_hash($tokenCode, PASSWORD_DEFAULT));
-                    die();
-
                     if (password_verify($tokenCode, $token->token)) {
                         $tokenTime = $token->expiration + 1800;
+                        $tokenCode = $this->generateToken(24);
+                        $token->token = password_hash($tokenCode, PASSWORD_DEFAULT);
 
+                        if ($tokenTime >= time()) {
+                            if ($Tokens->save($token)) {
 
-                        if($tokenTime >= time())
-                        {
-                            $this->response->statusCode('200');
-                            $data = [
-                                'message' => 'token valid.'
-                            ];
-                        }
-                        else{
+                                $this->response->statusCode('200');
+                                $data = [
+                                    'message' => 'token valid.',
+                                    'id' => $id,
+                                    'tokenCode' => $tokenCode
+                                ];
+                            } else {
+                                $this->response->statusCode('400');
+                                $data = [
+                                    'message' => 'token expired.',
+                                    'error' => true
+                                ];
+                            }
+                        } else {
                             $this->response->statusCode('400');
                             $data = [
                                 'message' => 'token expired.',
                                 'error' => true
                             ];
                         }
-                    }
-                    else{
+                    } else {
                         $this->response->statusCode('400');
                         $data = [
                             'message' => 'token not valid.',
                             'error' => true
                         ];
                     }
-
                 } else {
                     $this->response->statusCode('400');
                     $data = [
@@ -88,44 +92,80 @@ class AccountController extends AppController
                 ];
             }
         }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     public function changePass($token = null)
     {
-        $Users = TableRegistry::getTableLocator()->get('Users');
-
         if ($this->request->is('post')) {
             $data = $this->request->getData();
+            $Tokens = TableRegistry::getTableLocator()->get('Tokens');
+            $Users = TableRegistry::getTableLocator()->get('Users');
 
-            $account = $Users->get($account_id);
-
+            $data = $this->request->getData();
             $id = $data['id'];
             $tokenCode = $data['tokenCode'];
-            $account_id = $data['tokenUser'];
+            $password = $data['password'];
+            $user = $Users->get($id);
 
-            $account = $Users->get($account_id);
 
-            if ($data['password'] != $data["confirm-password"]) {
-                $error = "As senhas não conferem!";
-                $this->set(compact('error', 'account_id'));
-                return;
+            if ($user) {
+                $token = $Tokens->find('all', [
+                    'conditions' => ['user_id' => $id]
+                ])->first();
+
+
+                if ($token) {
+
+                    if (password_verify($tokenCode, $token->token)) {
+                        if ($Tokens->delete($token)) {
+                            $user->password = $password;
+                            if ($Users->save($user)) {
+                                $this->response->statusCode('200');
+                                $data = [
+                                    'message' => 'The password has been changed.'
+                                ];
+                            } else {
+                                $this->response->statusCode('400');
+                                $data = [
+                                    'message' => 'The password has not been changed. Please, try again.',
+                                    'error' => true
+                                ];
+                            }
+                        }
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = [
+                            'message' => 'token expired.',
+                            'error' => true
+                        ];
+                    }
+                } else {
+                    $this->response->statusCode('400');
+                    $data = [
+                        'message' => 'token not valid.',
+                        'error' => true
+                    ];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = [
+                    'message' => 'token not valid.',
+                    'error' => true
+                ];
             }
-
-            $account->password = $data['password'] . $account->secret;
-            $account->authToken = '';
-
-            if ($Accounts->save($account)) {
-                $this->Flash->success(__('A senha foi alterada com sucesso!'));
-                return $this->redirect(['controller' => '/']);
-            }
+        } else {
+            $this->response->statusCode('400');
+            $data = [
+                'message' => 'user not valid.',
+                'error' => true
+            ];
         }
-
-        if ($token == null || $token == '') {
-            die();
-            $this->Flash->error(__('Link Inválido!'));
-            return $this->redirect(['controller' => '/']);
-        }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
+
     public function lostAccount()
     {
         if ($this->request->is('post')) {
