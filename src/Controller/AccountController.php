@@ -53,6 +53,7 @@ class AccountController extends AppController
                                 $this->response->statusCode('200');
                                 $data = [
                                     'message' => 'token valid.',
+                                    'error' => false,
                                     'id' => $id,
                                     'tokenCode' => $tokenCode
                                 ];
