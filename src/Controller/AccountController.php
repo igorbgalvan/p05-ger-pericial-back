@@ -97,7 +97,7 @@ class AccountController extends AppController
         $this->set('_serialize', 'data');
     }
 
-    public function changePass($token = null)
+    public function changePass()
     {
         if ($this->request->is('post')) {
             $data = $this->request->getData();
@@ -125,7 +125,8 @@ class AccountController extends AppController
                             if ($Users->save($user)) {
                                 $this->response->statusCode('200');
                                 $data = [
-                                    'message' => 'The password has been changed.'
+                                    'message' => 'The password has been changed.',
+                                    'error' => false
                                 ];
                             } else {
                                 $this->response->statusCode('400');
