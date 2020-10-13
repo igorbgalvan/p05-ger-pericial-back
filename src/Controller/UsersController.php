@@ -200,7 +200,8 @@ class UsersController extends AppController
                 $this->response->statusCode('400');
                 $data = [
                     'message' => 'Error while saving.',
-                    'error' => $errors
+                    'error' => $errors,
+                    'user' => $user
                 ];
             }
         } else {
