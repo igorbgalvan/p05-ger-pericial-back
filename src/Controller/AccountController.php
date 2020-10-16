@@ -60,7 +60,7 @@ class AccountController extends AppController
                             } else {
                                 $this->response->statusCode('400');
                                 $data = [
-                                    'message' => 'token expired.',
+                                    'message' => 'error while saving token.',
                                     'error' => true
                                 ];
                             }
@@ -81,7 +81,7 @@ class AccountController extends AppController
                 } else {
                     $this->response->statusCode('400');
                     $data = [
-                        'message' => 'token not valid.',
+                        'message' => 'token not exists.',
                         'error' => true
                     ];
                 }
