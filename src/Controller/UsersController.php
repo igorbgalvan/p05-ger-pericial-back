@@ -8,6 +8,7 @@ use Cake\Event\Event;
 use App\View\Tradutor;
 use Cake\Filesystem\File;
 use Cake\Utility\Security;
+use Cake\Mailer\Email;
 
 /**
  * Users Controller

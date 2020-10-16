@@ -32,8 +32,9 @@ class UsersTable extends AbstractMigration
             ->addColumn('confirmation', 'boolean', [
                 'default' => '0',
             ])
-            ->addColumn('email_confirmed', 'boolean', [
+            ->addColumn('email_confirmed', 'string', [
                 'default' => '0',
+                'limit' => 255,
             ])
             ->addColumn('profile_picture', 'string', [
                 'null' => true,
