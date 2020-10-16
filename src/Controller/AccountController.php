@@ -216,17 +216,18 @@ class AccountController extends AppController
         $this->set('_serialize', 'data');
     }
 
-    public function confirmAccount($token)
+    public function confirmAccount()
     {
-        $data = explode('.', $token);
-        $id = $data[0];
-        $email_code = $data[1];
-
         $Users = TableRegistry::getTableLocator()->get('Users');
+        $data = $this->request->getData();
+        $id = $data['id'];
+        $tokenCode = $data['tokenCode'];
+
         $user = $Users->get($id);
+
         if($user){
 
-            if (password_verify($email_code, $user->email_confirmed)) {
+            if (password_verify($tokenCode, $user->email_confirmed)) {
                 $user->email_confirmed = time();
                 if ($Users->save($user)) {
                     
