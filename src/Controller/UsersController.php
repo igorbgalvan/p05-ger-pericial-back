@@ -192,7 +192,20 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+
+            $token = $this->generateToken(24);
+            $user->email_confirmed = password_hash($token, PASSWORD_DEFAULT);
+
             if ($this->Users->save($user)) {
+
+                $email = new Email('gerpericial');
+                $email->to($user->email)
+                ->subject('Confirmação de criação de conta')
+                ->emailFormat('html')
+                ->viewVars(['confirm_email_token' => $token, 'account_id' => $user->id])
+                ->template('default')
+                ->send();
+
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been saved.'];
             } else {

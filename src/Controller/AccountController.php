@@ -18,7 +18,7 @@ class AccountController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['lostAccount', 'changePass', 'verifyToken']);
+        $this->Auth->allow(['lostAccount', 'changePass', 'verifyToken', 'confirmAccount']);
     }
 
     public function verifyToken()
@@ -212,6 +212,66 @@ class AccountController extends AppController
             $data = ['message' => 'Request needs to be post'];
         }
 
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function confirmAccount($token)
+    {
+        $data = explode('.', $token);
+        $id = $data[0];
+        $email_code = $data[1];
+
+        $Users = TableRegistry::getTableLocator()->get('Users');
+        $user = $Users->get($id);
+        if($user){
+
+            if (password_verify($email_code, $user->email_confirmed)) {
+                $user->email_confirmed = time();
+                if ($Users->save($user)) {
+                    
+                    $this->response->statusCode('200');
+                    $data = ['message' => 'The email account has been confirmed'];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'token not valid', 'error' => true];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'user not valid', 'error' => true];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function resendEmail()
+    {
+        $Users = TableRegistry::getTableLocator()->get('Users');
+        $user = $Users->get($this->Auth->user('id'));
+
+        $token = $this->generateToken(24);
+        $user->email_confirmed = password_hash($token, PASSWORD_DEFAULT);
+        if ($Users->save($user)) {
+
+                $email = new Email('gerpericial');
+                $email->to($user->email)
+                ->subject('Confirmação de criação de conta')
+                ->emailFormat('html')
+                ->viewVars(['confirm_email_token' => $token, 'account_id' => $user->id])
+                ->template('default')
+                ->send();
+
+
+                $this->response->statusCode('200');
+                $data = ['message' => 'the email has been sent', 'error' => true];
+
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'error while sending email', 'error' => true];
+        }
+        
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
