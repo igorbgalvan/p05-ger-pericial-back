@@ -26,6 +26,21 @@ class UsersController extends AppController
         $this->Auth->allow(['add']);
     }
 
+    public function verifyUser(){
+        if($this->Auth->user())
+        {
+            $this->response->statusCode('200');
+            $data = ['user' => true];
+        }
+        else {
+            $this->response->statusCode('400');
+            $data = ['user' => false];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     /**
      * View method
      *
