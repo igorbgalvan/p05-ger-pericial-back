@@ -225,12 +225,12 @@ class AccountController extends AppController
 
         $user = $Users->get($id);
 
-        if($user){
+        if ($user) {
 
             if (password_verify($tokenCode, $user->email_confirmed)) {
                 $user->email_confirmed = time();
                 if ($Users->save($user)) {
-                    
+
                     $this->response->statusCode('200');
                     $data = ['message' => 'The email account has been confirmed'];
                 }
@@ -256,8 +256,8 @@ class AccountController extends AppController
         $user->email_confirmed = password_hash($token, PASSWORD_DEFAULT);
         if ($Users->save($user)) {
 
-                $email = new Email('gerpericial');
-                $email->to($user->email)
+            $email = new Email('gerpericial');
+            $email->to($user->email)
                 ->subject('Confirmação de criação de conta')
                 ->emailFormat('html')
                 ->viewVars(['confirm_email_token' => $token, 'account_id' => $user->id])
@@ -265,14 +265,13 @@ class AccountController extends AppController
                 ->send();
 
 
-                $this->response->statusCode('200');
-                $data = ['message' => 'the email has been sent', 'error' => true];
-
+            $this->response->statusCode('200');
+            $data = ['message' => 'the email has been sent', 'error' => true];
         } else {
             $this->response->statusCode('400');
             $data = ['message' => 'error while sending email', 'error' => true];
         }
-        
+
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
