@@ -36,6 +36,9 @@ class UsersTable extends AbstractMigration
                 'default' => '0',
                 'limit' => 255,
             ])
+            ->addColumn('actived', 'boolean', [
+                'default' => '1',
+            ])
             ->addColumn('profile_picture', 'string', [
                 'null' => true,
                 'default' => null,

@@ -38,6 +38,8 @@ class User extends Entity
         'phone' => true,
         'role_id' => true,
         'profile_picture' => true,
+        'actived' => true,
+        'email_confirmed' => true,
         'confirmation' => true,
         'created' => true,
         'modified' => true,

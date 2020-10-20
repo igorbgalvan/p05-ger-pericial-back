@@ -53,7 +53,7 @@ class UsersController extends AppController
         if ($this->Auth->user('role_id') == 2) {
             if ($this->Auth->user('confirmation') == true) {
                 $user = $this->Users->find('all', [
-                    'conditions' => ['confirmation' => 0]
+                    'conditions' => ['confirmation' => 0, 'actived' => 1]
                 ]);
 
                 $this->response->statusCode('200');
@@ -76,7 +76,7 @@ class UsersController extends AppController
     {
         if ($this->Auth->user('confirmation') == true) {
             $user = $this->Users->find('all', [
-                'conditions' => ['confirmation' => 1]
+                'conditions' => ['confirmation' => 1, 'actived' => 1]
             ]);
 
             $data = ['user' => $user];
@@ -320,7 +320,7 @@ class UsersController extends AppController
         $id = $this->request->getData('id');
         $user = $this->Users->get($id);
         if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
-            $user->confirmation = 0;
+            $user->actived = 0;
             if ($this->Users->save($user)) {
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been deleted.'];
