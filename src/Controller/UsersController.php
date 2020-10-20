@@ -320,7 +320,8 @@ class UsersController extends AppController
         $id = $this->request->getData('id');
         $user = $this->Users->get($id);
         if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
-            if ($this->Users->delete($user)) {
+            $user->confirmation = 0;
+            if ($this->Users->save($user)) {
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been deleted.'];
             } else {
