@@ -53,12 +53,18 @@ class RequestsController extends AppController
             $VehiclesRequests = TableRegistry::getTableLocator()->get('vehicles_requests');
             $VictimsRequests = TableRegistry::getTableLocator()->get('victims_requests');
 
-            $allData = $this->request->getData();
+            $vehicleData = [];
+            $victimData = [];
 
-            $vehicleData = $allData['vehicle'];
-            unset($allData['vehicle']);
-            $victimData = $allData['victim'];
-            unset($allData['victim']);
+            $allData = $this->request->getData();
+            if (isset($allData['vehicle'])) {
+                $vehicleData = $allData['vehicle'];
+                unset($allData['vehicle']);
+            }
+            if (isset($allData['victim'])) {
+                $victimData = $allData['victim'];
+                unset($allData['victim']);
+            }
 
             $request = $this->Requests->newEntity();
             $vehicle = $Vehicles->newEntity();
