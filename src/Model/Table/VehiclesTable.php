@@ -73,12 +73,6 @@ class VehiclesTable extends Table
             ->requirePresence('cor', 'create')
             ->notEmptyString('cor');
 
-        $validator
-            ->scalar('tipo')
-            ->maxLength('tipo', 255)
-            ->requirePresence('tipo', 'create')
-            ->notEmptyString('tipo');
-
         return $validator;
     }
 }

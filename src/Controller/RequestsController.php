@@ -17,18 +17,6 @@ use Cake\ORM\TableRegistry;
 class RequestsController extends AppController
 {
     /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null
-     */
-    public function index()
-    {
-        $requests = $this->paginate($this->Requests);
-
-        $this->set(compact('requests'));
-    }
-
-    /**
      * View method
      *
      * @param string|null $id Request id.
@@ -37,11 +25,19 @@ class RequestsController extends AppController
      */
     public function view($id = null)
     {
-        $request = $this->Requests->get($id, [
-            'contain' => ['Vehicles'],
-        ]);
+        $this->request->allowMethod(['get']);
 
-        $this->set('request', $request);
+        if ($this->Auth->user('confirmation') == true) {
+            $requests = $this->Requests->find('all');
+
+            $this->response = $this->response->withStatus(200);
+            $data = ['requests' => $requests];
+        } else {
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize your request.'];
+        }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     /**
@@ -53,25 +49,39 @@ class RequestsController extends AppController
     {
         if ($this->request->is('post')) {
             $Vehicles = TableRegistry::getTableLocator()->get('vehicles');
+            $Victim = TableRegistry::getTableLocator()->get('victims');
             $VehiclesRequests = TableRegistry::getTableLocator()->get('vehicles_requests');
+            $VictimsRequests = TableRegistry::getTableLocator()->get('victims_requests');
 
             $allData = $this->request->getData();
+
             $vehicleData = $allData['vehicle'];
             unset($allData['vehicle']);
+            $victimData = $allData['victim'];
+            unset($allData['victim']);
 
             $request = $this->Requests->newEntity();
             $vehicle = $Vehicles->newEntity();
             $vehiclesRequests = $VehiclesRequests->newEntity();
+            $victim = $Victim->newEntity();
+            $victimsRequests = $VictimsRequests->newEntity();
 
             $request = $this->Requests->patchEntity($request, $allData);
             if ($this->Requests->save($request)) {
 
                 foreach ($vehicleData as $v) {
 
-                    $vehicle = $Vehicles->patchEntity($vehicle, $v);
+                    $existVehicle = $Vehicles->find('all', ['conditions' => ['placa' => $v['placa']]])->first();
+
+                    if ($existVehicle) {
+                        $vehicle = $existVehicle;
+                    } else {
+                        $vehicle = $Vehicles->patchEntity($vehicle, $v);
+                    }
 
                     if ($Vehicles->save($vehicle)) {
-                        
+
+
                         $vehiclesRequests->vehicle_id = $vehicle->id;
                         $vehiclesRequests->request_id = $request->id;
 
@@ -86,6 +96,29 @@ class RequestsController extends AppController
                     } else {
                         $this->response->statusCode('400');
                         $data = ['message' => 'The vehicle could not be saved. Please, try again.'];
+                    }
+                }
+
+                foreach ($victimData as $v) {
+
+                    $victim = $Victim->patchEntity($victim, $v);
+
+                    if ($Victim->save($victim)) {
+
+                        $victimsRequests->victim_id = $victim->id;
+                        $victimsRequests->request_id = $request->id;
+
+                        if ($VictimsRequests->save($victimsRequests)) {
+
+                            $victim = $Victim->newEntity();
+                            $victimsRequests = $VictimsRequests->newEntity();
+                        } else {
+                            $this->response->statusCode('400');
+                            $data = ['message' => 'The victimsRequests could not be saved. Please, try again.'];
+                        }
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'The victim could not be saved. Please, try again.'];
                     }
                 }
 

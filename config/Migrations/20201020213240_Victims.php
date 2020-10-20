@@ -1,8 +1,7 @@
 <?php
-
 use Migrations\AbstractMigration;
 
-class Vehicles extends AbstractMigration
+class Victims extends AbstractMigration
 {
     /**
      * Change Method.
@@ -13,11 +12,12 @@ class Vehicles extends AbstractMigration
      */
     public function change()
     {
-
-        $table = $this->table('vehicles');
-        $table->addColumn('marca', 'string', ['limit' => 255])
-            ->addColumn('placa', 'string', ['limit' => 255])
-            ->addColumn('cor', 'string', ['limit' => 255])
+        $table = $this->table('victims');
+        $table->addColumn('name', 'string', ['limit' => 255])
+        ->addColumn('created', 'datetime', [
+            'default' => 'CURRENT_TIMESTAMP',
+            'null' => false,
+        ])
             ->create();
     }
 }

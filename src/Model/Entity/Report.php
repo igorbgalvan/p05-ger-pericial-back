@@ -28,6 +28,8 @@ class Report extends Entity
         'delivery_date' => true,
         'user_id' => true,
         'receiver' => true,
+        'request_id' => true,
+        'status' => true,
         'user' => true,
     ];
 }

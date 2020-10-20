@@ -82,7 +82,7 @@ class UsersController extends AppController
             $data = ['user' => $user];
             $this->response = $this->response->withStatus(200);
         } else {
-            $this->response = $this->response->withStatus(200);
+            $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize your request.'];
         }
 

@@ -4,17 +4,15 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Vehicle Entity
+ * VictimsRequest Entity
  *
- * @property int $id
- * @property string $marca
- * @property string $placa
- * @property string $cor
- * @property string $tipo
+ * @property int $victim_id
+ * @property int $request_id
  *
- * @property \App\Model\Entity\Request[] $requests
+ * @property \App\Model\Entity\Victim $victim
+ * @property \App\Model\Entity\Request $request
  */
-class Vehicle extends Entity
+class VictimsRequest extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -26,9 +24,7 @@ class Vehicle extends Entity
      * @var array
      */
     protected $_accessible = [
-        'marca' => true,
-        'placa' => true,
-        'cor' => true,
-        'requests' => true,
+        'victim' => true,
+        'request' => true,
     ];
 }
