@@ -60,7 +60,7 @@ class RequestsTable extends Table
             ->allowEmptyDateTime('data_documento');
 
         $validator
-            ->date('data_realização_pericia')
+            ->date('data_realizacao_pericia')
             ->allowEmptyDateTime('data_realização_perícia');
 
         $validator

@@ -46,7 +46,7 @@ class Request extends Entity
      */
     protected $_accessible = [
         'data_documento' => true,
-        'data_realização_pericia' => true,
+        'data_realizacao_pericia' => true,
         'data_recebimento' => true,
         'tipo_pericia' => true,
         'exame_pericia' => true,
