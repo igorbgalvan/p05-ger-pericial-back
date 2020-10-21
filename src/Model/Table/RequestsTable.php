@@ -61,7 +61,7 @@ class RequestsTable extends Table
 
         $validator
             ->date('data_realizacao_pericia')
-            ->allowEmptyDateTime('data_realização_perícia');
+            ->allowEmptyDateTime('data_realizacao_pericia');
 
         $validator
             ->date('data_recebimento')
@@ -79,8 +79,8 @@ class RequestsTable extends Table
 
         $validator
             ->scalar('descricao')
-            ->maxLength('descrição', 600)
-            ->allowEmptyString('descrição');
+            ->maxLength('descricao', 600)
+            ->allowEmptyString('descricao');
 
         $validator
             ->scalar('nome_vitima')
@@ -164,8 +164,8 @@ class RequestsTable extends Table
 
         $validator
             ->scalar('observacoes')
-            ->maxLength('observações', 600)
-            ->allowEmptyString('observações');
+            ->maxLength('observacoes', 600)
+            ->allowEmptyString('observacoes');
 
         return $validator;
     }
