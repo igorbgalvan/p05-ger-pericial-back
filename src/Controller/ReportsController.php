@@ -40,6 +40,8 @@ class ReportsController extends AppController
      */
     public function add()
     {
+        var_dump($this->request->getData())
+        ;die();
         $report = $this->Reports->newEntity();
         if ($this->request->is('post')) {
             $report = $this->Reports->patchEntity($report, $this->request->getData());

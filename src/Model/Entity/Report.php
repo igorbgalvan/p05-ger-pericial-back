@@ -28,6 +28,7 @@ class Report extends Entity
      * @var array
      */
     protected $_accessible = [
+        'id' => true,
         'delivery_date' => true,
         'user_id' => true,
         'request_id' => true,
