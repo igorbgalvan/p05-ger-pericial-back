@@ -54,6 +54,9 @@ class RequestsController extends AppController
                 }
                 $request->vehicle = $vehicles;
                 $request->victims = $victims;
+                
+                $vehicles = array();
+                $victims = array();
             }
 
 
