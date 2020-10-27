@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Reports Model
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\RequestsTable&\Cake\ORM\Association\BelongsTo $Requests
  *
  * @method \App\Model\Entity\Report get($primaryKey, $options = [])
  * @method \App\Model\Entity\Report newEntity($data = null, array $options = [])
@@ -40,6 +41,10 @@ class ReportsTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+        $this->belongsTo('Requests', [
+            'foreignKey' => 'request_id',
+            'joinType' => 'INNER',
+        ]);
     }
 
     /**
@@ -51,19 +56,23 @@ class ReportsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->integer('id')
+            ->scalar('id')
+            ->maxLength('id', 25)
             ->allowEmptyString('id', null, 'create');
 
         $validator
             ->integer('delivery_date')
-            ->requirePresence('delivery_date', 'create')
-            ->notEmptyString('delivery_date');
+            ->allowEmptyString('delivery_date');
 
         $validator
             ->scalar('receiver')
             ->maxLength('receiver', 255)
-            ->requirePresence('receiver', 'create')
-            ->notEmptyString('receiver');
+            ->allowEmptyString('receiver');
+
+        $validator
+            ->scalar('status')
+            ->maxLength('status', 255)
+            ->allowEmptyString('status');
 
         return $validator;
     }
@@ -78,6 +87,7 @@ class ReportsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['request_id'], 'Requests'));
 
         return $rules;
     }

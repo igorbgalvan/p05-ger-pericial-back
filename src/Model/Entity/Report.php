@@ -6,12 +6,15 @@ use Cake\ORM\Entity;
 /**
  * Report Entity
  *
- * @property int $id
- * @property int $delivery_date
+ * @property string $id
+ * @property int|null $delivery_date
  * @property int $user_id
- * @property string $receiver
+ * @property int $request_id
+ * @property string|null $receiver
+ * @property string|null $status
  *
  * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Request $request
  */
 class Report extends Entity
 {
@@ -27,9 +30,10 @@ class Report extends Entity
     protected $_accessible = [
         'delivery_date' => true,
         'user_id' => true,
-        'receiver' => true,
         'request_id' => true,
+        'receiver' => true,
         'status' => true,
         'user' => true,
+        'request' => true,
     ];
 }
