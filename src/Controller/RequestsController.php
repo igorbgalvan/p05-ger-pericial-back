@@ -27,8 +27,35 @@ class RequestsController extends AppController
     {
         $this->request->allowMethod(['get']);
 
+        $Vehicles = TableRegistry::getTableLocator()->get('vehicles');
+        $Victim = TableRegistry::getTableLocator()->get('victims');
+        $VehiclesRequests = TableRegistry::getTableLocator()->get('vehicles_requests');
+        $VictimsRequests = TableRegistry::getTableLocator()->get('victims_requests');
+
+        $vehicles = array();
+        $victims = array();
+
         if ($this->Auth->user('confirmation') == true) {
+            //$requests = $this->Requests->find('all');
+
             $requests = $this->Requests->find('all');
+
+            foreach ($requests as $request) {
+                $vehiclesRequests = $VehiclesRequests->find('all', ['conditions' => ['request_id' => $request->id]]);
+                $victimsRequests = $VictimsRequests->find('all', ['conditions' => ['request_id' => $request->id]]);
+
+                foreach ($vehiclesRequests as $v_R) {
+                    $allVehicles = $Vehicles->find('all', ['conditions' => ['id' => $v_R->vehicle_id]]);
+                    array_push($vehicles, $allVehicles);
+                }
+                foreach ($victimsRequests as $v_R) {
+                    $allVictim = $Victim->find('all', ['conditions' => ['id' => $v_R->victim_id]]);
+                    array_push($victims, $allVictim);
+                }
+                $request->vehicle = $vehicles;
+                $request->victims = $victims;
+            }
+
 
             $this->response = $this->response->withStatus(200);
             $data = ['requests' => $requests];
