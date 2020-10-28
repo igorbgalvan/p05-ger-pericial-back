@@ -266,7 +266,7 @@ class AccountController extends AppController
 
 
             $this->response->statusCode('200');
-            $data = ['message' => 'the email has been sent', 'error' => true];
+            $data = ['message' => 'the email has been sent', 'error' => false];
         } else {
             $this->response->statusCode('400');
             $data = ['message' => 'error while sending email', 'error' => true];
