@@ -41,6 +41,12 @@ class RequestsTable extends Table
             'targetForeignKey' => 'vehicle_id',
             'joinTable' => 'vehicles_requests',
         ]);
+
+        $this->belongsToMany('Victims', [
+            'foreignKey' => 'request_id',
+            'targetForeignKey' => 'victim_id',
+            'joinTable' => 'victims_requests',
+        ]);
     }
 
     /**

@@ -27,37 +27,13 @@ class RequestsController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $Vehicles = TableRegistry::getTableLocator()->get('vehicles');
-        $Victim = TableRegistry::getTableLocator()->get('victims');
-        $VehiclesRequests = TableRegistry::getTableLocator()->get('vehicles_requests');
-        $VictimsRequests = TableRegistry::getTableLocator()->get('victims_requests');
-
-        $vehicles = array();
-        $victims = array();
 
         if ($this->Auth->user('confirmation') == true) {
             //$requests = $this->Requests->find('all');
 
-            $requests = $this->Requests->find('all');
-
-            foreach ($requests as $request) {
-                $vehiclesRequests = $VehiclesRequests->find('all', ['conditions' => ['request_id' => $request->id]]);
-                $victimsRequests = $VictimsRequests->find('all', ['conditions' => ['request_id' => $request->id]]);
-
-                foreach ($vehiclesRequests as $v_R) {
-                    $allVehicles = $Vehicles->find('all', ['conditions' => ['id' => $v_R->vehicle_id]]);
-                    array_push($vehicles, $allVehicles);
-                }
-                foreach ($victimsRequests as $v_R) {
-                    $allVictim = $Victim->find('all', ['conditions' => ['id' => $v_R->victim_id]]);
-                    array_push($victims, $allVictim);
-                }
-                $request->vehicle = $vehicles;
-                $request->victims = $victims;
-                
-                $vehicles = array();
-                $victims = array();
-            }
+            $requests = $this->Requests->find('all', [
+                'contain' => ['Vehicles', 'Victims'],
+            ]);
 
 
             $this->response = $this->response->withStatus(200);
@@ -185,20 +161,29 @@ class RequestsController extends AppController
      */
     public function edit($id = null)
     {
-        $request = $this->Requests->get($id, [
-            'contain' => ['Vehicles'],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->request->is(['post', 'put'])) {
+            $id = $this->request->getData('id');
+
+            $request = $this->Requests->get($id, [
+                'contain' => ['Vehicles', 'Victims'],
+            ]);
+
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
-                $this->Flash->success(__('The request has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                $this->response->statusCode('200');
+                $data = ['message' => "A requisição foi salva com sucesso"];
             }
-            $this->Flash->error(__('The request could not be saved. Please, try again.'));
+            else{
+                $this->response->statusCode('400');
+                $data = ['message' => "A requisição não foi salva. Por favor, contate um administrador."];
+            }
+
+
         }
-        $vehicles = $this->Requests->Vehicles->find('list', ['limit' => 200]);
-        $this->set(compact('request', 'vehicles'));
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     /**
