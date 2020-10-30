@@ -46,6 +46,35 @@ class RequestsController extends AppController
         $this->set('_serialize', 'data');
     }
 
+    public function viewOne($id = null)
+    {
+        $this->request->allowMethod(['get']);
+
+
+        if ($this->Auth->user('confirmation') == true) {
+            //$requests = $this->Requests->find('all');
+
+            $request = $this->Requests->get($id, [
+                'contain' => ['Vehicles', 'Victims'],
+            ]);
+
+            if($request){
+                $this->response = $this->response->withStatus(200);
+                $data = ['request' => $request];
+            }
+            else{
+                $this->response = $this->response->withStatus(404);
+                $data = ['message' => 'Not found', 'error' => true];
+            }
+
+        } else {
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize your request.'];
+        }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     /**
      * Add method
      *
