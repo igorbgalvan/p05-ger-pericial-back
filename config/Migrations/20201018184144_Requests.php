@@ -17,6 +17,7 @@ class Requests extends AbstractMigration
         ->addColumn('data_realizacao_pericia', 'date', ['null' => true])
         ->addColumn('data_recebimento', 'date', ['null' => true])
         ->addColumn('tipo_pericia', 'string', ['limit' => 255, 'null' => true])
+        ->addColumn('tipo_requisicao', 'string', ['limit' => 255, 'null' => true])
         ->addColumn('exame_pericia', 'string', ['limit' => 255, 'null' => true])
         ->addColumn('descricao', 'string', ['limit' => 600, 'null' => true])
         ->addColumn('nome_vitima', 'string', ['limit' => 255, 'null' => true])

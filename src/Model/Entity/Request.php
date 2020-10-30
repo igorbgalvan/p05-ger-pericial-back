@@ -49,6 +49,7 @@ class Request extends Entity
         'data_realizacao_pericia' => true,
         'data_recebimento' => true,
         'tipo_pericia' => true,
+        'tipo_requisicao' => true,
         'exame_pericia' => true,
         'descricao' => true,
         'nome_vitima' => true,

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -77,6 +78,11 @@ class RequestsTable extends Table
             ->scalar('tipo_pericia')
             ->maxLength('tipo_pericia', 255)
             ->allowEmptyString('tipo_pericia');
+            
+        $validator
+            ->scalar('tipo_requisicao')
+            ->maxLength('tipo_requisicao', 255)
+            ->allowEmptyString('tipo_requisicao');
 
         $validator
             ->scalar('exame_pericia')
