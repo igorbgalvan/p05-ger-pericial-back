@@ -61,7 +61,7 @@ class ReportsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->integer('delivery_date')
+            ->date('delivery_date')
             ->allowEmptyString('delivery_date');
 
         $validator
