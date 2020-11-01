@@ -16,7 +16,7 @@ class Reports extends AbstractMigration
 
         $table = $this->table('reports', ['id' => false, 'primary_key' => ['id']]);
         $table->addColumn('id', 'string', ['limit' => 25])
-            ->addColumn('delivery_date', 'integer', ['null' => true])
+            ->addColumn('delivery_date', 'date', ['null' => true])
             ->addColumn('user_id', 'integer')
             ->addColumn('request_id', 'integer')
             ->addColumn('receiver', 'string', ['limit' => 255, 'null' => true])
