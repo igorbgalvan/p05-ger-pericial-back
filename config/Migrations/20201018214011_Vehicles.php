@@ -15,9 +15,9 @@ class Vehicles extends AbstractMigration
     {
 
         $table = $this->table('vehicles');
-        $table->addColumn('marca', 'string', ['limit' => 255])
-            ->addColumn('placa', 'string', ['limit' => 255])
-            ->addColumn('cor', 'string', ['limit' => 255])
+        $table->addColumn('marca', 'string', ['limit' => 255, 'null' => true])
+            ->addColumn('placa', 'string', ['limit' => 255, 'null' => true])
+            ->addColumn('cor', 'string', ['limit' => 255, 'null' => true])
             ->create();
     }
 }
