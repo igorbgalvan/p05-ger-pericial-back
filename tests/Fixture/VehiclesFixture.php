@@ -19,7 +19,6 @@ class VehiclesFixture extends TestFixture
         'marca' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'placa' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'cor' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'tipo' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -42,7 +41,6 @@ class VehiclesFixture extends TestFixture
                 'marca' => 'Lorem ipsum dolor sit amet',
                 'placa' => 'Lorem ipsum dolor sit amet',
                 'cor' => 'Lorem ipsum dolor sit amet',
-                'tipo' => 'Lorem ipsum dolor sit amet',
             ],
         ];
         parent::init();

@@ -31,10 +31,6 @@
             <td><?= h($vehicle->cor) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Tipo') ?></th>
-            <td><?= h($vehicle->tipo) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($vehicle->id) ?></td>
         </tr>
@@ -46,11 +42,12 @@
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Data Documento') ?></th>
-                <th scope="col"><?= __('Data Realização Perícia') ?></th>
+                <th scope="col"><?= __('Data Realizacao Pericia') ?></th>
                 <th scope="col"><?= __('Data Recebimento') ?></th>
                 <th scope="col"><?= __('Tipo Pericia') ?></th>
+                <th scope="col"><?= __('Tipo Requisicao') ?></th>
                 <th scope="col"><?= __('Exame Pericia') ?></th>
-                <th scope="col"><?= __('Descrição') ?></th>
+                <th scope="col"><?= __('Descricao') ?></th>
                 <th scope="col"><?= __('Nome Vitima') ?></th>
                 <th scope="col"><?= __('N Documento') ?></th>
                 <th scope="col"><?= __('N Bo') ?></th>
@@ -67,18 +64,19 @@
                 <th scope="col"><?= __('N Laudos Expedidos') ?></th>
                 <th scope="col"><?= __('N Oficio') ?></th>
                 <th scope="col"><?= __('Cargo') ?></th>
-                <th scope="col"><?= __('Observações') ?></th>
+                <th scope="col"><?= __('Observacoes') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($vehicle->requests as $requests): ?>
             <tr>
                 <td><?= h($requests->id) ?></td>
                 <td><?= h($requests->data_documento) ?></td>
-                <td><?= h($requests->data_realização_perícia) ?></td>
+                <td><?= h($requests->data_realizacao_pericia) ?></td>
                 <td><?= h($requests->data_recebimento) ?></td>
                 <td><?= h($requests->tipo_pericia) ?></td>
+                <td><?= h($requests->tipo_requisicao) ?></td>
                 <td><?= h($requests->exame_pericia) ?></td>
-                <td><?= h($requests->descrição) ?></td>
+                <td><?= h($requests->descricao) ?></td>
                 <td><?= h($requests->nome_vitima) ?></td>
                 <td><?= h($requests->n_documento) ?></td>
                 <td><?= h($requests->n_bo) ?></td>
@@ -95,7 +93,7 @@
                 <td><?= h($requests->n_laudos_expedidos) ?></td>
                 <td><?= h($requests->n_oficio) ?></td>
                 <td><?= h($requests->cargo) ?></td>
-                <td><?= h($requests->observações) ?></td>
+                <td><?= h($requests->observacoes) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Requests', 'action' => 'view', $requests->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Requests', 'action' => 'edit', $requests->id]) ?>

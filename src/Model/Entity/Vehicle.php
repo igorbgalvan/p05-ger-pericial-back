@@ -10,7 +10,6 @@ use Cake\ORM\Entity;
  * @property string $marca
  * @property string $placa
  * @property string $cor
- * @property string $tipo
  *
  * @property \App\Model\Entity\Request[] $requests
  */

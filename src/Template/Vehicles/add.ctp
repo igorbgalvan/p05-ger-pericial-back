@@ -20,7 +20,6 @@
             echo $this->Form->control('marca');
             echo $this->Form->control('placa');
             echo $this->Form->control('cor');
-            echo $this->Form->control('tipo');
             echo $this->Form->control('requests._ids', ['options' => $requests]);
         ?>
     </fieldset>

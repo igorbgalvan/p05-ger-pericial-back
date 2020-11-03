@@ -58,17 +58,17 @@ class VehiclesTable extends Table
         $validator
             ->scalar('marca')
             ->maxLength('marca', 255)
-            ->allowEmptyString('marca', null, 'create');
+            ->allowEmptyString('marca');
 
         $validator
             ->scalar('placa')
             ->maxLength('placa', 255)
-            ->allowEmptyString('placa', null, 'create');
+            ->allowEmptyString('placa');
 
         $validator
             ->scalar('cor')
             ->maxLength('cor', 255)
-            ->allowEmptyString('cor', null, 'create');
+            ->allowEmptyString('cor');
 
         return $validator;
     }

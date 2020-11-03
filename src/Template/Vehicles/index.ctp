@@ -21,7 +21,6 @@
                 <th scope="col"><?= $this->Paginator->sort('marca') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('placa') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('cor') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('tipo') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -32,7 +31,6 @@
                 <td><?= h($vehicle->marca) ?></td>
                 <td><?= h($vehicle->placa) ?></td>
                 <td><?= h($vehicle->cor) ?></td>
-                <td><?= h($vehicle->tipo) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $vehicle->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $vehicle->id]) ?>
