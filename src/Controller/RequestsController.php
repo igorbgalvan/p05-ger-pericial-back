@@ -207,8 +207,9 @@ class RequestsController extends AppController
                 $data = ['message' => "A requisição foi salva com sucesso"];
             }
             else{
+                $error = $request->getErrors();
                 $this->response->statusCode('400');
-                $data = ['message' => "A requisição não foi salva. Por favor, contate um administrador."];
+                $data = ['message' => "A requisição não foi salva. Por favor, contate um administrador.", "error" => $error];
             }
 
 
