@@ -58,11 +58,13 @@ class RequestsController extends AppController
             $reports = $Reports->find('all', [
                 'contain' => ['Users'],
             ]);
+
+            $data = ["reports" => $reports];
         }
 
 
-        var_dump($reports);
-        die();
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     public function viewOne($id = null)
