@@ -57,10 +57,10 @@ class RequestsController extends AppController
 
             $reports = $Reports->find('all', [
                 'contain' => ['Users'],
-            ]);
+            ])->select('reports.id', 'count(users.id)');
 
             $data = ["reports" => $reports];
-            
+
         }
 
         $this->set(compact('data'));
