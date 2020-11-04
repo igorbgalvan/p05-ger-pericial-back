@@ -60,6 +60,7 @@ class RequestsController extends AppController
             ]);
 
             $data = ["reports" => $reports];
+            
         }
 
         $this->set(compact('data'));
