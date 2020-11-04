@@ -16,6 +16,7 @@ use Cake\ORM\TableRegistry;
  */
 class RequestsController extends AppController
 {
+    
     /**
      * View method
      *
@@ -44,6 +45,22 @@ class RequestsController extends AppController
         }
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
+    }
+
+    public function select()
+    {
+        $this->request->allowMethod(['get']);
+
+        $Reports = TableRegistry::getTableLocator()->get('reports');
+
+        $reports = $Reports->find('all', [
+            'contain' => ['Users'],
+        ]);
+
+
+        var_dump($reports);
+        die();
+
     }
 
     public function viewOne($id = null)
