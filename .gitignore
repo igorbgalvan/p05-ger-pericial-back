@@ -6,6 +6,7 @@
 /tmp/*
 /vendor/*
 /autoPull.txt
+/autoPush.txt
 
 # OS generated files #
 ######################
