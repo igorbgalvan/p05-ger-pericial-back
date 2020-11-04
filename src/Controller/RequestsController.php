@@ -16,7 +16,7 @@ use Cake\ORM\TableRegistry;
  */
 class RequestsController extends AppController
 {
-    
+
     /**
      * View method
      *
@@ -51,16 +51,18 @@ class RequestsController extends AppController
     {
         $this->request->allowMethod(['get']);
 
-        $Reports = TableRegistry::getTableLocator()->get('reports');
+        if ($this->Auth->user('confirmation') == true) {
 
-        $reports = $Reports->find('all', [
-            'contain' => ['Users'],
-        ]);
+            $Reports = TableRegistry::getTableLocator()->get('reports');
+
+            $reports = $Reports->find('all', [
+                'contain' => ['Users'],
+            ]);
+        }
 
 
         var_dump($reports);
         die();
-
     }
 
     public function viewOne($id = null)
@@ -75,15 +77,13 @@ class RequestsController extends AppController
                 'contain' => ['Vehicles', 'Victims'],
             ]);
 
-            if($request){
+            if ($request) {
                 $this->response = $this->response->withStatus(200);
                 $data = ['request' => $request];
-            }
-            else{
+            } else {
                 $this->response = $this->response->withStatus(404);
                 $data = ['message' => 'Not found', 'error' => true];
             }
-
         } else {
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize your request.'];
@@ -222,14 +222,11 @@ class RequestsController extends AppController
 
                 $this->response->statusCode('200');
                 $data = ['message' => "A requisição foi salva com sucesso"];
-            }
-            else{
+            } else {
                 $error = $request->getErrors();
                 $this->response->statusCode('400');
                 $data = ['message' => "A requisição não foi salva. Por favor, contate um administrador.", "error" => $error];
             }
-
-
         }
 
         $this->set(compact('data'));
