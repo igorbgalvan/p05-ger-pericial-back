@@ -57,7 +57,7 @@ class RequestsController extends AppController
 
             $reports = $Reports->find('all', [
                 'contain' => ['Users'],
-            ])->select('reports.id', 'users.id');
+            ])->select('reports.id', 'users');
 
             $data = ["reports" => $reports];
 
