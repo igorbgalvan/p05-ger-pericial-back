@@ -5,6 +5,7 @@
 /logs/*
 /tmp/*
 /vendor/*
+/autoPull.txt
 
 # OS generated files #
 ######################
