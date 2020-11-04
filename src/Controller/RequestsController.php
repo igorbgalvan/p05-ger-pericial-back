@@ -55,10 +55,10 @@ class RequestsController extends AppController
 
             $Reports = TableRegistry::getTableLocator()->get('reports');
 
-            
+
             $reports = $Reports->find('all', [
                 'contain' => ['Users'],
-            ])->select('reports.id', 'reports.user_id');
+            ]);
 
             $data = ["reports" => $reports];
 
