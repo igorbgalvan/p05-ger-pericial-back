@@ -65,8 +65,7 @@ class RequestsController extends AppController
                 array_push($user_count, $aux);
             }
 
-            $min = min($user_count);
-            var_dump(max($user_count));
+            var_dump(array_search(min($user_count), $user_count));
             die();
             
             $data = ["reports" => $user_count];
