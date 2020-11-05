@@ -64,6 +64,9 @@ class RequestsController extends AppController
                 $aux = [$report->user_id => $report->count];
                 array_push($user_count, $aux);
             }
+
+            $min = min($user_count);
+            die();
             
             $data = ["reports" => $user_count];
 
