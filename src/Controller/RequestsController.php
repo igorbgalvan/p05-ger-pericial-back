@@ -55,34 +55,38 @@ class RequestsController extends AppController
 
             $Reports = TableRegistry::getTableLocator()->get('reports');
 
-
             $reports = $Reports->find('all');
-            $reports->select(['user_id', 'count' => $reports->func()->count('*')])->group('user_id');
-            $user_count = array();
-            $min_values = array();
+            $reports->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+            $reports->select(['Users.id', 'count' => $reports->func()->count('user_id')])->group(['Users.id']);;
+
+            if (json_decode(json_encode($reports))) {
+
+                $user_count = array();
+                $min_values = array();
+
+                foreach ($reports as $report) {
+                    $user_count[$report['Users']['id']] = $report['count'];
+                }
+                $min = min($user_count);
+
+                foreach ($user_count as $key => $value) {
+                    if ($value === $min)
+                        $min_values[$key] = $value;
+                }
+
+                $user = array_rand($min_values, 1);
 
 
-            foreach($reports as $report){
-                $user_count[$report->user_id] = $report->count;
+                $this->response = $this->response->withStatus(200);
+                $data = ["user_selected" => $user];
+                
+            } else {
+                $this->response = $this->response->withStatus(400);
+                $data = ['message' => 'You need someone authorize your request.', 'error' => true];
             }
-
-            $min = min($user_count);
-
-            foreach($user_count as $key => $value){
-                if($value === $min)
-                    $min_values[$key] = $value;
-            }
-
-            $user = array_rand($min_values, 1); 
-
-
-            $this->response = $this->response->withStatus(200);
-            $data = ["user_selected" => $user];
-
-        }
-        else{
+        } else {
             $this->response = $this->response->withStatus(400);
-            $data = ['message' => 'You need someone authorize your request.'];
+            $data = ['message' => 'Something got wrong, call the server admin.', 'error' => true];
         }
 
         $this->set(compact('data'));
