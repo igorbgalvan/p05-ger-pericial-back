@@ -57,7 +57,7 @@ class RequestsController extends AppController
 
 
             $reports = $Reports->find('all');
-            $reports->select('user_id', ['count' => $reports->count('*')])->group('user_id');
+            $reports->select(['count' => $reports->count('*')])->group('user_id');
             
             $data = ["reports" => $reports];
 
