@@ -66,7 +66,7 @@ class RequestsController extends AppController
             }
 
             $min = min($user_count);
-            var_dump($user_count);
+            var_dump(max($user_count));
             die();
             
             $data = ["reports" => $user_count];
