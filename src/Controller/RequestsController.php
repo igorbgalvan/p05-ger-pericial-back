@@ -59,17 +59,30 @@ class RequestsController extends AppController
             $reports = $Reports->find('all');
             $reports->select(['user_id', 'count' => $reports->func()->count('*')])->group('user_id');
             $user_count = array();
+            $min_values = array();
+
 
             foreach($reports as $report){
-                $aux = [$report->user_id => $report->count];
-                array_push($user_count, $aux);
+                $user_count[$report->user_id] = $report->count;
             }
 
-            var_dump(array_search(min($user_count), $user_count));
-            die();
-            
-            $data = ["reports" => $user_count];
+            $min = min($user_count);
 
+            foreach($user_count as $key => $value){
+                if($value === $min)
+                    $min_values[$key] = $value;
+            }
+
+            $user = array_rand($min_values, 1); 
+
+
+            $this->response = $this->response->withStatus(200);
+            $data = ["user_selected" => $user];
+
+        }
+        else{
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize your request.'];
         }
 
         $this->set(compact('data'));
