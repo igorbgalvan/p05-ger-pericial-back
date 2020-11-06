@@ -18,14 +18,13 @@ class ReportsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
-    public function view()
+    public function view($id = null)
     {
         if ($this->Auth->user('confirmation') == true) {
 
-            $report_id = $this->request->getQuery('report_id');
 
-            if (isset($report_id)) {
-                $reports = $this->Reports->find('all', ['conditions' => ['id' => $report_id]]);
+            if (isset($id)) {
+                $reports = $this->Reports->find('all', ['conditions' => ['request_id' => $id]]);
             } else {
                 $reports = $this->Reports->find('all');
             }
