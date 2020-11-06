@@ -71,5 +71,6 @@ class Request extends Entity
         'observacoes' => true,
         'vehicles' => true,
         'victims' => true,
+        'reports' => true,
     ];
 }

@@ -21,7 +21,15 @@ class ReportsController extends AppController
     public function view()
     {
         if ($this->Auth->user('confirmation') == true) {
-            $reports = $this->Reports->find('all');
+
+            $report_id = $this->request->getQuery('report_id');
+
+            if (isset($report_id)) {
+                $reports = $this->Reports->find('all', ['conditions' => ['id' => $report_id]]);
+            } else {
+                $reports = $this->Reports->find('all');
+            }
+
             $this->response->statusCode('200');
             $data = ['reports' => $reports];
         } else {
