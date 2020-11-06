@@ -9,8 +9,10 @@ use Cake\Validation\Validator;
 /**
  * Reports Model
  *
+ * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\BelongsTo $Reports
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\RequestsTable&\Cake\ORM\Association\BelongsTo $Requests
+ * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
  *
  * @method \App\Model\Entity\Report get($primaryKey, $options = [])
  * @method \App\Model\Entity\Report newEntity($data = null, array $options = [])
@@ -37,6 +39,10 @@ class ReportsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Reports', [
+            'foreignKey' => 'report_id',
+            'joinType' => 'INNER',
+        ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
@@ -44,6 +50,9 @@ class ReportsTable extends Table
         $this->belongsTo('Requests', [
             'foreignKey' => 'request_id',
             'joinType' => 'INNER',
+        ]);
+        $this->hasMany('Reports', [
+            'foreignKey' => 'report_id',
         ]);
     }
 
@@ -56,13 +65,12 @@ class ReportsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->scalar('id')
-            ->maxLength('id', 25)
+            ->integer('id')
             ->allowEmptyString('id', null, 'create');
 
         $validator
             ->date('delivery_date')
-            ->allowEmptyString('delivery_date');
+            ->allowEmptyDate('delivery_date');
 
         $validator
             ->scalar('receiver')

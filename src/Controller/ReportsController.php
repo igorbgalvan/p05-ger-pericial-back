@@ -47,6 +47,29 @@ class ReportsController extends AppController
         $this->set('_serialize', 'data');
     }
 
+    public function checkReport()
+    {
+        if ($this->Auth->user('confirmation') == true) {
+
+            $report_id = $this->request->getQuery('report_id');
+            $reports = $this->Reports->find('all', ['conditions' => ['report_id' => $report_id]])->first();
+
+            if ($reports) {
+                $this->response->statusCode('200');
+                $data = ['message' => 'The report already exists in database.', 'exists' => true];
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'The report not exists in database.', 'exists' => false];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'You need someone authorize your request.', 'error' => true];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     /**
      * Add method
      *
