@@ -29,11 +29,18 @@ class ReportsController extends AppController
                 $reports = $this->Reports->find('all');
             }
 
-            $this->response->statusCode('200');
-            $data = ['reports' => $reports];
+            if (json_decode(json_encode($reports)) != []) {
+
+                $this->response->statusCode('200');
+                $data = ['reports' => $reports, 'error' => false];
+            } else {
+
+                $this->response->statusCode('400');
+                $data = ['message' => 'Not found this request.', 'error' => true];
+            }
         } else {
             $this->response->statusCode('400');
-            $data = ['message' => 'You need someone authorize your request.'];
+            $data = ['message' => 'You need someone authorize your request.', 'error' => true];
         }
 
         $this->set(compact('data'));
