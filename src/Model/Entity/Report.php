@@ -7,13 +7,13 @@ use Cake\ORM\Entity;
  * Report Entity
  *
  * @property int $id
- * @property string $report_id
- * @property \Cake\I18n\FrozenDate $delivery_date
+ * @property string|null $report_id
+ * @property \Cake\I18n\FrozenDate|null $delivery_date
  * @property int $user_id
- * @property int $request_id
+ * @property int|null $request_id
  * @property string|null $position
- * @property string $receiver
- * @property string $status
+ * @property string|null $receiver
+ * @property string|null $status
  *
  * @property \App\Model\Entity\Report[] $reports
  * @property \App\Model\Entity\User $user

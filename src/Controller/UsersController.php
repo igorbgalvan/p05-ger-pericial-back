@@ -32,19 +32,15 @@ class UsersController extends AppController
         $this->Auth->allow(['add']);
     }
 
-    public function verifyUser(){
-        if($this->Auth->user())
-        {
+    public function verifyUser()
+    {
+        if ($this->Auth->user()) {
             $this->response->statusCode('200');
             $data = ['user' => true];
-        }
-        else {
+        } else {
             $this->response->statusCode('400');
             $data = ['user' => false];
         }
-
-        $this->set(compact('data'));
-        $this->set('_serialize', 'data');
     }
 
     public function uploadFile()
@@ -52,40 +48,35 @@ class UsersController extends AppController
 
         if ($this->request->is('post')) {
 
+            $id = $this->Auth->user('id');
 
-            $id = $this->Users->user('id');
-
-            var_dump($id);
-            die();
-
-            $picture_ext = pathinfo($this->request->data['profile_picture'][0]['name'], PATHINFO_EXTENSION);
-
+            $picture_ext = pathinfo($this->request->data['profile_picture']['name'], PATHINFO_EXTENSION);
 
             if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
-                $user['profile_picture'] = uniqid() . rand(10, 99) . '.' . $picture_ext;
 
-                $data = ['id' => $id, 'profile_picture' => $user['profile_picture']];
 
-                $response = $this->post_request("191.252.202.56/fabrica/p05-ger-pericial/users/edit.json", $data, $this->Auth->user('token'));
-
-                if ($response->user) {
-                    $user = (array) $response->user;
-                    $user['token'] = $this->Auth->user('token');
+                $user = $this->Users->get($this->Auth->user('id'));
+                
+                if (!isset($user->profile_picture)) {
+                    $user->profile_picture = uniqid() . rand(10, 99) . '.' . $picture_ext;
+                }
+                if ($this->Users->save($user)) {
                     $this->Auth->setUser($user);
-
-
-                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->data['profile_picture'][0]);
-                    $this->Flash->success("Imagem alterada com sucesso.");
-                    return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+                    $this->Upload->uploadFile('pictures', $user->profile_picture, $this->request->data['profile_picture']);
                 } else {
-                    $this->Flash->error('Ocorreu um erro ao tentar salvar a imagem. Por favor, tente novamente.');
-                    return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'Error while saving', 'error' => $user->getErrors()];
                 }
             } else {
-                $this->Flash->error("Extensao de arquivo inválida.");
-                return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+                $this->response->statusCode('400');
+                $data = ['message' => 'Extension not valid.'];
             }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'Method Not Allowed'];
         }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
     }
 
     /**
@@ -263,11 +254,11 @@ class UsersController extends AppController
 
                 $email = new Email('gerpericial');
                 $email->to($user->email)
-                ->subject('Confirmação de criação de conta')
-                ->emailFormat('html')
-                ->viewVars(['confirm_email_token' => $token, 'account_id' => $user->id])
-                ->template('default')
-                ->send();
+                    ->subject('Confirmação de criação de conta')
+                    ->emailFormat('html')
+                    ->viewVars(['confirm_email_token' => $token, 'account_id' => $user->id])
+                    ->template('default')
+                    ->send();
 
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been saved.'];

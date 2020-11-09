@@ -15,13 +15,13 @@ class Reports extends AbstractMigration
     {
 
         $table = $this->table('reports');
-        $table->addColumn('report_id', 'string', ['limit' => 40])
-            ->addColumn('delivery_date', 'date')
+        $table->addColumn('report_id', 'string', ['limit' => 40, 'null' => true])
+            ->addColumn('delivery_date', 'date', ['null' => true])
             ->addColumn('user_id', 'integer')
-            ->addColumn('request_id', 'integer')
+            ->addColumn('request_id', 'integer', ['null' => true])
             ->addColumn('position', 'string', ['limit' => 255, 'null' => true])
-            ->addColumn('receiver', 'string', ['limit' => 255])
-            ->addColumn('status', 'string', ['limit' => 255])
+            ->addColumn('receiver', 'string', ['limit' => 255, 'null' => true])
+            ->addColumn('status', 'string', ['limit' => 255, 'null' => true])
             ->addForeignKey('user_id', 'users', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->addForeignKey('request_id', 'requests', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->create();

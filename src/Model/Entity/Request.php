@@ -7,12 +7,15 @@ use Cake\ORM\Entity;
  * Request Entity
  *
  * @property int $id
- * @property \Cake\I18n\FrozenTime|null $data_documento
- * @property \Cake\I18n\FrozenTime|null $data_realização_perícia
- * @property \Cake\I18n\FrozenTime|null $data_recebimento
+ * @property \Cake\I18n\FrozenDate|null $data_documento
+ * @property int $user_id
+ * @property \Cake\I18n\FrozenDate|null $data_realizacao_pericia
+ * @property \Cake\I18n\FrozenDate|null $data_recebimento
  * @property string|null $tipo_pericia
+ * @property string|null $tipo_ocorrencia
+ * @property string|null $tipo_requisicao
  * @property string|null $exame_pericia
- * @property string|null $descrição
+ * @property string|null $descricao
  * @property string|null $nome_vitima
  * @property string|null $n_documento
  * @property string|null $n_bo
@@ -29,9 +32,11 @@ use Cake\ORM\Entity;
  * @property string|null $n_laudos_expedidos
  * @property string|null $n_oficio
  * @property string|null $cargo
- * @property string|null $observações
+ * @property string|null $observacoes
  *
  * @property \App\Model\Entity\Vehicle[] $vehicles
+ * @property \App\Model\Entity\Victim[] $victims
+ * @property \App\Model\Entity\Report[] $reports
  */
 class Request extends Entity
 {
@@ -46,9 +51,11 @@ class Request extends Entity
      */
     protected $_accessible = [
         'data_documento' => true,
+        'user_id' => true,
         'data_realizacao_pericia' => true,
         'data_recebimento' => true,
         'tipo_pericia' => true,
+        'tipo_ocorrencia' => true,
         'tipo_requisicao' => true,
         'exame_pericia' => true,
         'descricao' => true,

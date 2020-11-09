@@ -41,7 +41,6 @@ class ReportsTable extends Table
 
         $this->belongsTo('Reports', [
             'foreignKey' => 'report_id',
-            'joinType' => 'INNER',
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -49,7 +48,6 @@ class ReportsTable extends Table
         ]);
         $this->belongsTo('Requests', [
             'foreignKey' => 'request_id',
-            'joinType' => 'INNER',
         ]);
         $this->hasMany('Reports', [
             'foreignKey' => 'report_id',
@@ -70,8 +68,7 @@ class ReportsTable extends Table
 
         $validator
             ->date('delivery_date')
-            ->requirePresence('delivery_date', 'create')
-            ->notEmptyDate('delivery_date');
+            ->allowEmptyDate('delivery_date');
 
         $validator
             ->scalar('position')
@@ -81,14 +78,12 @@ class ReportsTable extends Table
         $validator
             ->scalar('receiver')
             ->maxLength('receiver', 255)
-            ->requirePresence('receiver', 'create')
-            ->notEmptyString('receiver');
+            ->allowEmptyString('receiver');
 
         $validator
             ->scalar('status')
             ->maxLength('status', 255)
-            ->requirePresence('status', 'create')
-            ->notEmptyString('status');
+            ->allowEmptyString('status');
 
         return $validator;
     }

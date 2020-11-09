@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -10,7 +9,10 @@ use Cake\Validation\Validator;
 /**
  * Requests Model
  *
+ * @property &\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
  * @property \App\Model\Table\VehiclesTable&\Cake\ORM\Association\BelongsToMany $Vehicles
+ * @property \App\Model\Table\VictimsTable&\Cake\ORM\Association\BelongsToMany $Victims
  *
  * @method \App\Model\Entity\Request get($primaryKey, $options = [])
  * @method \App\Model\Entity\Request newEntity($data = null, array $options = [])
@@ -37,20 +39,22 @@ class RequestsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Users', [
+            'foreignKey' => 'user_id',
+            'joinType' => 'INNER',
+        ]);
+        $this->hasMany('Reports', [
+            'foreignKey' => 'request_id',
+        ]);
         $this->belongsToMany('Vehicles', [
             'foreignKey' => 'request_id',
             'targetForeignKey' => 'vehicle_id',
             'joinTable' => 'vehicles_requests',
         ]);
-
         $this->belongsToMany('Victims', [
             'foreignKey' => 'request_id',
             'targetForeignKey' => 'victim_id',
             'joinTable' => 'victims_requests',
-        ]);
-
-        $this->hasMany('Reports', [
-            'foreignKey' => 'request_id',   
         ]);
     }
 
@@ -68,21 +72,25 @@ class RequestsTable extends Table
 
         $validator
             ->date('data_documento')
-            ->allowEmptyDateTime('data_documento');
+            ->allowEmptyDate('data_documento');
 
         $validator
             ->date('data_realizacao_pericia')
-            ->allowEmptyDateTime('data_realizacao_pericia');
+            ->allowEmptyDate('data_realizacao_pericia');
 
         $validator
             ->date('data_recebimento')
-            ->allowEmptyDateTime('data_recebimento');
+            ->allowEmptyDate('data_recebimento');
 
         $validator
             ->scalar('tipo_pericia')
             ->maxLength('tipo_pericia', 255)
             ->allowEmptyString('tipo_pericia');
-            
+
+        $validator
+            ->scalar('tipo_ocorrencia')
+            ->allowEmptyString('tipo_ocorrencia');
+
         $validator
             ->scalar('tipo_requisicao')
             ->maxLength('tipo_requisicao', 255)
@@ -184,5 +192,19 @@ class RequestsTable extends Table
             ->allowEmptyString('observacoes');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
+
+        return $rules;
     }
 }
