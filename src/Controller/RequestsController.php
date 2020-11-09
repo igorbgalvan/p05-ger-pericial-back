@@ -16,6 +16,11 @@ use Cake\ORM\TableRegistry;
  */
 class RequestsController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Upload');
+    }
 
     /**
      * View method
@@ -42,6 +47,37 @@ class RequestsController extends AppController
         } else {
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize your request.'];
+        }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+
+    public function uploadDocument()
+    {
+
+        if ($this->request->is('post')) {
+
+            $id = $this->request->getData('id');
+
+            $picture_ext = pathinfo($this->request->data['document']['name'], PATHINFO_EXTENSION);
+
+            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF', 'pdf', 'doc', 'docx', 'csv'])) {
+
+
+                $name = $id . "." . uniqid() . rand(10, 99) . '.' . $picture_ext;
+
+                $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
+
+                $this->response->statusCode('200');
+                $data = ['message' => 'The document has been uploaded'];
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'Extension not valid.'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'Method Not Allowed'];
         }
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
