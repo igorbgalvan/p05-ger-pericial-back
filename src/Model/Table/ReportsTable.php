@@ -102,7 +102,6 @@ class ReportsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['report_id'], 'Reports'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['request_id'], 'Requests'));
 
