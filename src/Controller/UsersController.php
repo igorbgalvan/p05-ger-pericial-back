@@ -20,6 +20,12 @@ use Cake\Mailer\Email;
 class UsersController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Upload');
+    }
+
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -39,6 +45,47 @@ class UsersController extends AppController
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
+    }
+
+    public function uploadFile()
+    {
+
+        if ($this->request->is('post')) {
+
+
+            $id = $this->Users->user('id');
+
+            var_dump($id);
+            die();
+
+            $picture_ext = pathinfo($this->request->data['profile_picture'][0]['name'], PATHINFO_EXTENSION);
+
+
+            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF'])) {
+                $user['profile_picture'] = uniqid() . rand(10, 99) . '.' . $picture_ext;
+
+                $data = ['id' => $id, 'profile_picture' => $user['profile_picture']];
+
+                $response = $this->post_request("191.252.202.56/fabrica/p05-ger-pericial/users/edit.json", $data, $this->Auth->user('token'));
+
+                if ($response->user) {
+                    $user = (array) $response->user;
+                    $user['token'] = $this->Auth->user('token');
+                    $this->Auth->setUser($user);
+
+
+                    $this->Upload->uploadFile('pictures', $user['profile_picture'], $this->request->data['profile_picture'][0]);
+                    $this->Flash->success("Imagem alterada com sucesso.");
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+                } else {
+                    $this->Flash->error('Ocorreu um erro ao tentar salvar a imagem. Por favor, tente novamente.');
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+                }
+            } else {
+                $this->Flash->error("Extensao de arquivo inválida.");
+                return $this->redirect(['controller' => 'Pages', 'action' => 'profile']);
+            }
+        }
     }
 
     /**
