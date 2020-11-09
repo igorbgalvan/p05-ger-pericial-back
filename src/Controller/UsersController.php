@@ -43,7 +43,7 @@ class UsersController extends AppController
         }
     }
 
-    public function uploadFile()
+    public function uploadPicture()
     {
 
         if ($this->request->is('post')) {
@@ -56,17 +56,50 @@ class UsersController extends AppController
 
 
                 $user = $this->Users->get($this->Auth->user('id'));
-                
+
                 if (!isset($user->profile_picture)) {
                     $user->profile_picture = uniqid() . rand(10, 99) . '.' . $picture_ext;
                 }
                 if ($this->Users->save($user)) {
                     $this->Auth->setUser($user);
                     $this->Upload->uploadFile('pictures', $user->profile_picture, $this->request->data['profile_picture']);
+
+                    $this->response->statusCode('200');
+                    $data = ['message' => 'The image has been uploaded'];
                 } else {
                     $this->response->statusCode('400');
                     $data = ['message' => 'Error while saving', 'error' => $user->getErrors()];
                 }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'Extension not valid.'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'Method Not Allowed'];
+        }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function uploadDocument()
+    {
+
+        if ($this->request->is('post')) {
+
+            $id = $this->request->getData('id');
+
+            $picture_ext = pathinfo($this->request->data['document']['name'], PATHINFO_EXTENSION);
+
+            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF', 'pdf', 'doc', 'docx', 'csv'])) {
+
+
+                $name = $id . "." . uniqid() . rand(10, 99) . '.' . $picture_ext;
+
+                $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
+
+                $this->response->statusCode('200');
+                $data = ['message' => 'The document has been uploaded'];
             } else {
                 $this->response->statusCode('400');
                 $data = ['message' => 'Extension not valid.'];
