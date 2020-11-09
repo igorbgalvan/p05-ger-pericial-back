@@ -70,17 +70,25 @@ class ReportsTable extends Table
 
         $validator
             ->date('delivery_date')
-            ->allowEmptyDate('delivery_date');
+            ->requirePresence('delivery_date', 'create')
+            ->notEmptyDate('delivery_date');
+
+        $validator
+            ->scalar('position')
+            ->maxLength('position', 255)
+            ->allowEmptyString('position');
 
         $validator
             ->scalar('receiver')
             ->maxLength('receiver', 255)
-            ->allowEmptyString('receiver');
+            ->requirePresence('receiver', 'create')
+            ->notEmptyString('receiver');
 
         $validator
             ->scalar('status')
             ->maxLength('status', 255)
-            ->allowEmptyString('status');
+            ->requirePresence('status', 'create')
+            ->notEmptyString('status');
 
         return $validator;
     }
@@ -94,6 +102,7 @@ class ReportsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->existsIn(['report_id'], 'Reports'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
         $rules->add($rules->existsIn(['request_id'], 'Requests'));
 

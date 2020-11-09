@@ -8,11 +8,12 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $report_id
- * @property \Cake\I18n\FrozenDate|null $delivery_date
+ * @property \Cake\I18n\FrozenDate $delivery_date
  * @property int $user_id
  * @property int $request_id
- * @property string|null $receiver
- * @property string|null $status
+ * @property string|null $position
+ * @property string $receiver
+ * @property string $status
  *
  * @property \App\Model\Entity\Report[] $reports
  * @property \App\Model\Entity\User $user
@@ -34,6 +35,7 @@ class Report extends Entity
         'delivery_date' => true,
         'user_id' => true,
         'request_id' => true,
+        'position' => true,
         'receiver' => true,
         'status' => true,
         'reports' => true,
