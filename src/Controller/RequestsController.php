@@ -100,7 +100,7 @@ class RequestsController extends AppController
             $requests = $this->Requests->find('all', ['conditions' => ['user_id' => $id]]);
 
             $this->response->statusCode('200');
-            $data = ['report' => $requests, 'error' => false];
+            $data = ['requests' => $requests, 'error' => false];
         } else {
             $this->response->statusCode('400');
             $data = ['message' => 'You need someone authorize your request.', 'error' => true];
