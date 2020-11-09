@@ -52,21 +52,6 @@ class ReportsController extends AppController
     public function viewOne($id = null)
     {
         if ($this->Auth->user('confirmation') == true) {
-            $requests = $this->Requests->find('all', ['conditions' => ['user_id' => $id]]);
-            $this->response->statusCode('200');
-            $data = ['report' => $requests, 'error' => false];
-        } else {
-            $this->response->statusCode('400');
-            $data = ['message' => 'You need someone authorize your request.', 'error' => true];
-        }
-
-        $this->set(compact('data'));
-        $this->set('_serialize', 'data');
-    }
-
-    public function viewUser($id = null)
-    {
-        if ($this->Auth->user('confirmation') == true) {
             $report = $this->Reports->find('all', ['conditions' => ['id' => $id]]);
             $this->response->statusCode('200');
             $data = ['report' => $report, 'error' => false];
@@ -78,6 +63,7 @@ class ReportsController extends AppController
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
+    
 
     public function checkReport()
     {

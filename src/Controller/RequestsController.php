@@ -79,7 +79,6 @@ class RequestsController extends AppController
 
                 $this->response = $this->response->withStatus(200);
                 $data = ["user_selected" => $user];
-                
             } else {
                 $this->response = $this->response->withStatus(400);
                 $data = ['message' => 'You need someone authorize your request.', 'error' => true];
@@ -87,6 +86,24 @@ class RequestsController extends AppController
         } else {
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'Something got wrong, call the server admin.', 'error' => true];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function viewUser($id = null)
+    {
+
+
+        if ($this->Auth->user('confirmation') == true) {
+            $requests = $this->Requests->find('all', ['conditions' => ['user_id' => $id]]);
+
+            $this->response->statusCode('200');
+            $data = ['report' => $requests, 'error' => false];
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'You need someone authorize your request.', 'error' => true];
         }
 
         $this->set(compact('data'));
