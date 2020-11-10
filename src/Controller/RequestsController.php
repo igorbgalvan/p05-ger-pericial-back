@@ -89,19 +89,19 @@ class RequestsController extends AppController
 
         if ($this->Auth->user('confirmation') == true) {
 
-            $Reports = TableRegistry::getTableLocator()->get('reports');
+            $Requests = TableRegistry::getTableLocator()->get('requests');
 
-            $reports = $Reports->find('all');
-            $reports->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-            $reports->select(['Users.id', 'count' => $reports->func()->count('user_id')])->group(['Users.id']);;
+            $requests = $Requests->find('all');
+            $requests->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+            $requests->select(['Users.id', 'count' => $requests->func()->count('user_id')])->group(['Users.id']);;
 
-            if (json_decode(json_encode($reports))) {
+            if (json_decode(json_encode($requests))) {
 
                 $user_count = array();
                 $min_values = array();
 
-                foreach ($reports as $report) {
-                    $user_count[$report['Users']['id']] = $report['count'];
+                foreach ($requests as $request) {
+                    $user_count[$request['Users']['id']] = $request['count'];
                 }
                 $min = min($user_count);
 
