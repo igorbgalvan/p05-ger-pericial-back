@@ -9,8 +9,9 @@ use Cake\Validation\Validator;
 /**
  * Requests Model
  *
- * @property &\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
+ * @property &\Cake\ORM\Association\HasMany $RequestDocuments
  * @property \App\Model\Table\VehiclesTable&\Cake\ORM\Association\BelongsToMany $Vehicles
  * @property \App\Model\Table\VictimsTable&\Cake\ORM\Association\BelongsToMany $Victims
  *
@@ -44,6 +45,9 @@ class RequestsTable extends Table
             'joinType' => 'INNER',
         ]);
         $this->hasMany('Reports', [
+            'foreignKey' => 'request_id',
+        ]);
+        $this->hasMany('RequestDocuments', [
             'foreignKey' => 'request_id',
         ]);
         $this->belongsToMany('Vehicles', [

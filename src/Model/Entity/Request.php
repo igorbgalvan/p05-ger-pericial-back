@@ -34,9 +34,10 @@ use Cake\ORM\Entity;
  * @property string|null $cargo
  * @property string|null $observacoes
  *
+ * @property \App\Model\Entity\User $user
+ * @property \App\Model\Entity\Report[] $reports
  * @property \App\Model\Entity\Vehicle[] $vehicles
  * @property \App\Model\Entity\Victim[] $victims
- * @property \App\Model\Entity\Report[] $reports
  */
 class Request extends Entity
 {
@@ -76,8 +77,9 @@ class Request extends Entity
         'n_oficio' => true,
         'cargo' => true,
         'observacoes' => true,
+        'user' => true,
+        'reports' => true,
         'vehicles' => true,
         'victims' => true,
-        'reports' => true,
     ];
 }

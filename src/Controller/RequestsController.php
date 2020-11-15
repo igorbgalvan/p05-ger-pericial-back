@@ -38,7 +38,7 @@ class RequestsController extends AppController
             //$requests = $this->Requests->find('all');
 
             $requests = $this->Requests->find('all', [
-                'contain' => ['Vehicles', 'Victims'],
+                'contain' => ['Vehicles', 'Victims', 'RequestDocuments'],
             ]);
 
 
@@ -63,14 +63,23 @@ class RequestsController extends AppController
             $picture_ext = pathinfo($this->request->data['document']['name'], PATHINFO_EXTENSION);
 
             if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF', 'pdf', 'doc', 'docx', 'csv'])) {
+                $Documents = TableRegistry::getTableLocator()->get('request_documents');
 
+                $requestDocument = $Documents->newEntity();
 
                 $name = $id . "." . uniqid() . rand(10, 99) . '.' . $picture_ext;
 
-                $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
+                $data = ['request_id' => $this->request->data['id'], 'doc_name' => $name];
 
-                $this->response->statusCode('200');
-                $data = ['message' => 'The document has been uploaded'];
+                $requestDocument = $Documents->patchEntity($requestDocument, $data);
+                if ($Documents->save($requestDocument)) {
+                    $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
+                    $this->response->statusCode('200');
+                    $data = ['message' => 'The document has been uploaded'];
+                } else {
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'The document has not uploaded', 'error' => $requestDocument->getErrors()];
+                }
             } else {
                 $this->response->statusCode('400');
                 $data = ['message' => 'Extension not valid.'];
