@@ -60,6 +60,12 @@ class RequestDocumentsTable extends Table
             ->requirePresence('doc_name', 'create')
             ->notEmptyString('doc_name');
 
+        $validator
+            ->scalar('title')
+            ->maxLength('title', 255)
+            ->requirePresence('title', 'create')
+            ->notEmptyString('title');
+
         return $validator;
     }
 

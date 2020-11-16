@@ -70,7 +70,7 @@ class RequestsController extends AppController
 
                 $name = $id . "." . uniqid() . rand(10, 99) . '.' . $picture_ext;
 
-                $data = ['request_id' => $this->request->data['id'], 'doc_name' => $name];
+                $data = ['request_id' => $this->request->data['id'], 'doc_name' => $name, 'title' => $this->request->data['title']];
 
                 $requestDocument = $Documents->patchEntity($requestDocument, $data);
                 if ($this->Upload->uploadFile('documents', $name,  $this->request->data['document'])) {

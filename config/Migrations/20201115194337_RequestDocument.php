@@ -15,6 +15,7 @@ class RequestDocument extends AbstractMigration
         $table = $this->table('request_documents');
         $table->addColumn('request_id', 'integer')
             ->addColumn('doc_name', 'string', ['limit' => 255])
+            ->addColumn('title', 'string', ['limit' => 255])
             ->addForeignKey('request_id', 'requests', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->create();
     }

@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $request_id
  * @property string $doc_name
+ * @property string $title
  *
  * @property \App\Model\Entity\Request $request
  */
@@ -26,6 +27,7 @@ class RequestDocument extends Entity
     protected $_accessible = [
         'request_id' => true,
         'doc_name' => true,
+        'title' => true,
         'request' => true,
     ];
 }
