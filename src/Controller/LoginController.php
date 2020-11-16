@@ -31,7 +31,7 @@ class LoginController extends AppController
                 $data = ['message' => 'Usuário ou senha inválidos'];
             } else {
                 $this->Auth->setUser($user);
-                $user['token'] = \Firebase\JWT\JWT::encode(['sub' => $user['email'], 'exp' => time() + 3600], Security::salt());
+                $user['token'] = \Firebase\JWT\JWT::encode(['sub' => $user['email'], 'exp' => time() + 86400], Security::salt());
                 $this->response->statusCode('200');
                 $data = [
                     'message' => 'Bem vindo!',
