@@ -55,6 +55,8 @@ class RequestsController extends AppController
 
     public function uploadDocument()
     {
+        var_dump($this->request->getData());
+        die();  
 
         if ($this->request->is('post')) {
 
@@ -75,10 +77,10 @@ class RequestsController extends AppController
                 if ($Documents->save($requestDocument)) {
                     $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
                     $this->response->statusCode('200');
-                    $data = ['message' => 'The document has been uploaded'];
+                    $data = ['message' => 'The document has been uploaded', 'success' => true];
                 } else {
                     $this->response->statusCode('400');
-                    $data = ['message' => 'The document has not uploaded', 'error' => $requestDocument->getErrors()];
+                    $data = ['message' => 'The document has not uploaded', 'success' => false, 'error' => $requestDocument->getErrors()];
                 }
             } else {
                 $this->response->statusCode('400');
