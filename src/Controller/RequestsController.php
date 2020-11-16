@@ -55,8 +55,7 @@ class RequestsController extends AppController
 
     public function uploadDocument()
     {
-        var_dump($this->request->getData());
-        die();  
+
 
         if ($this->request->is('post')) {
 
