@@ -79,11 +79,11 @@ class RequestsController extends AppController
                         $data = ['message' => 'The document has been uploaded', 'success' => true];
                     } else {
                         $this->response->statusCode('400');
-                        $data = ['message' => 'The document has not uploaded', 'success' => false, 'error' => $requestDocument->getErrors()];
+                        $data = ['message' => 'The document has not uploaded in db', 'success' => false, 'error' => $requestDocument->getErrors()];
                     }
                 } else {
                     $this->response->statusCode('400');
-                    $data = ['message' => 'The document has not uploaded', 'success' => false, 'error' => $requestDocument->getErrors()];
+                    $data = ['message' => 'The document has not uploaded in system', 'success' => false, 'error' => $requestDocument->getErrors()];
                 }
             } else {
                 $this->response->statusCode('400');
