@@ -73,10 +73,14 @@ class RequestsController extends AppController
                 $data = ['request_id' => $this->request->data['id'], 'doc_name' => $name];
 
                 $requestDocument = $Documents->patchEntity($requestDocument, $data);
-                if ($Documents->save($requestDocument)) {
-                    $this->Upload->uploadFile('documents', $name,  $this->request->data['document']);
-                    $this->response->statusCode('200');
-                    $data = ['message' => 'The document has been uploaded', 'success' => true];
+                if ($this->Upload->uploadFile('documents', $name,  $this->request->data['document'])) {
+                    if ($Documents->save($requestDocument)) {
+                        $this->response->statusCode('200');
+                        $data = ['message' => 'The document has been uploaded', 'success' => true];
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'The document has not uploaded', 'success' => false, 'error' => $requestDocument->getErrors()];
+                    }
                 } else {
                     $this->response->statusCode('400');
                     $data = ['message' => 'The document has not uploaded', 'success' => false, 'error' => $requestDocument->getErrors()];
