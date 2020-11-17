@@ -64,6 +64,8 @@ class RequestsController extends AppController
                 if ($document) {
                     if ($RDocuments->delete($document)) {
                         unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
+                        $this->response->statusCode('200');
+                        $data = ['message' => 'Document has been deleted in database and system.'];
                     }
                     else{
                         $this->response->statusCode('400');
