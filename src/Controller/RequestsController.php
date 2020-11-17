@@ -75,7 +75,7 @@ class RequestsController extends AppController
                 }
             } else {
                 $this->response->statusCode('400');
-                $data = ['message' => 'Document not exis.'];
+                $data = ['message' => 'Document not exist.'];
             }
         } else {
             $this->response->statusCode('400');
