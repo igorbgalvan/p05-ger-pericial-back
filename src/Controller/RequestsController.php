@@ -63,7 +63,7 @@ class RequestsController extends AppController
 
             $picture_ext = pathinfo($this->request->data['document']['name'], PATHINFO_EXTENSION);
 
-            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF', 'pdf', 'doc', 'docx', 'csv'])) {
+            if (in_array($picture_ext, ['png', 'jpg', 'jpeg', 'gif', 'PNG', 'JPG', 'JPEG', 'GIF', 'pdf', 'doc', 'docx', 'csv', 'txt', 'pptx', 'ppt',  'xlsx', 'xls', 'odt', 'rtf', 'html'])) {
                 $Documents = TableRegistry::getTableLocator()->get('request_documents');
 
                 $requestDocument = $Documents->newEntity();
