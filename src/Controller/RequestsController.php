@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\Rule\ExistsIn;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -48,6 +49,40 @@ class RequestsController extends AppController
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize your request.'];
         }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function deleteDocument($docName = null)
+    {
+        $this->request->allowMethod(['get']);
+        if ($docName != null) {
+            if (file_exists(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName)) {
+                $RDocuments = TableRegistry::getTableLocator()->get('request_documents');
+                $document = $RDocuments->find('all', ['coditions' => ['doc_name' => $docName]])->first();
+
+                if ($document) {
+                    if ($RDocuments->delete($document)) {
+                        unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
+                    }
+                    else{
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'Document not deleted in database.'];
+                    }
+                } else {
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'Document not exists in database.'];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'Document not exis.'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'Document not valid.'];
+        }
+
+
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
