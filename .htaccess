@@ -11,9 +11,3 @@
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
 </IfModule>
-
-
-
-<Directory "/var/www/html/fabrica/p05-ger-pericial/webroot/files/documents">
-LimitRequestBody 5242880
-</Directory>
