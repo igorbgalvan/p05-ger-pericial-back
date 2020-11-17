@@ -65,23 +65,23 @@ class RequestsController extends AppController
                     if ($RDocuments->delete($document)) {
                         unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
                         $this->response->statusCode('200');
-                        $data = ['message' => 'Document has been deleted in database and system.'];
+                        $data = ['message' => 'Document has been deleted in database and system.', 'success' => true];
                     }
                     else{
                         $this->response->statusCode('400');
-                        $data = ['message' => 'Document not deleted in database.'];
+                        $data = ['message' => 'Document not deleted in database.', 'success' => false];
                     }
                 } else {
                     $this->response->statusCode('400');
-                    $data = ['message' => 'Document not exists in database.'];
+                    $data = ['message' => 'Document not exists in database.', 'success' => false];
                 }
             } else {
                 $this->response->statusCode('400');
-                $data = ['message' => 'Document not exist.'];
+                $data = ['message' => 'Document not exist.', 'success' => false];
             }
         } else {
             $this->response->statusCode('400');
-            $data = ['message' => 'Document not valid.'];
+            $data = ['message' => 'Document not valid.', 'success' => false];
         }
 
 
