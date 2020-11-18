@@ -266,7 +266,7 @@ class RequestsController extends AppController
             //$requests = $this->Requests->find('all');
 
             $request = $this->Requests->get($id, [
-                'contain' => ['Vehicles', 'Victims'],
+                'contain' => ['Vehicles', 'Victims', 'Users'],
             ]);
 
             if ($request) {
@@ -463,7 +463,7 @@ class RequestsController extends AppController
             $this->set('_serialize', 'data');
             return;
         }
-        
+
         $this->request->allowMethod(['post', 'delete']);
         $request = $this->Requests->get($id);
         if ($this->Requests->delete($request)) {
