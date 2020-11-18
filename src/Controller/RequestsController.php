@@ -21,6 +21,7 @@ class RequestsController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Upload');
+
     }
 
     /**
@@ -32,6 +33,17 @@ class RequestsController extends AppController
      */
     public function view($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
+
         $this->request->allowMethod(['get']);
 
 
@@ -55,6 +67,16 @@ class RequestsController extends AppController
 
     public function deleteDocument($docName = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['get']);
         if ($docName != null) {
             if (file_exists(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName)) {
@@ -92,6 +114,15 @@ class RequestsController extends AppController
 
     public function uploadDocument()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
 
 
         if ($this->request->is('post')) {
@@ -136,6 +167,16 @@ class RequestsController extends AppController
 
     public function select()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['get']);
 
         if ($this->Auth->user('confirmation') == true) {
@@ -181,6 +222,15 @@ class RequestsController extends AppController
 
     public function viewUser($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
 
 
         if ($this->Auth->user('confirmation') == true) {
@@ -199,6 +249,16 @@ class RequestsController extends AppController
 
     public function viewOne($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['get']);
 
 
@@ -231,6 +291,16 @@ class RequestsController extends AppController
      */
     public function add()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->request->is('post')) {
             $Vehicles = TableRegistry::getTableLocator()->get('vehicles');
             $Victim = TableRegistry::getTableLocator()->get('victims');
@@ -342,6 +412,16 @@ class RequestsController extends AppController
      */
     public function edit($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->request->is(['post', 'put'])) {
             $id = $this->request->getData('id');
 
@@ -374,6 +454,16 @@ class RequestsController extends AppController
      */
     public function delete($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+        
         $this->request->allowMethod(['post', 'delete']);
         $request = $this->Requests->get($id);
         if ($this->Requests->delete($request)) {

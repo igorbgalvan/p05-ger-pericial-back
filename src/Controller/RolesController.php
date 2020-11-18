@@ -40,6 +40,16 @@ class RolesController extends AppController
      */
     public function add()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $role = $this->Roles->newEntity();
         if ($this->request->is('post')) {
             $role = $this->Roles->patchEntity($role, $this->request->getData());
@@ -71,6 +81,16 @@ class RolesController extends AppController
      */
     public function edit($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $role = $this->Roles->get($id, [
             'contain' => [],
         ]);
@@ -95,6 +115,16 @@ class RolesController extends AppController
      */
     public function delete($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+        
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->getData('id');
         $role = $this->Roles->get($id);

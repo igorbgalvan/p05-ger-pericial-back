@@ -20,6 +20,16 @@ class ReportsController extends AppController
      */
     public function view($id = null)
     {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->Auth->user('confirmation') == true) {
 
 
@@ -51,6 +61,16 @@ class ReportsController extends AppController
 
     public function viewOne($id = null)
     {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->Auth->user('confirmation') == true) {
             $report = $this->Reports->find('all', ['conditions' => ['id' => $id]]);
             $this->response->statusCode('200');
@@ -63,10 +83,21 @@ class ReportsController extends AppController
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
-    
+
 
     public function checkReport()
     {
+
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->Auth->user('confirmation') == true) {
 
             $report_id = $this->request->getQuery('report_id');
@@ -95,6 +126,16 @@ class ReportsController extends AppController
      */
     public function add()
     {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
 
         $report = $this->Reports->newEntity();
         if ($this->request->is('post')) {
@@ -132,6 +173,16 @@ class ReportsController extends AppController
      */
     public function edit($id = null)
     {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['post', 'put']);
 
         $id = $this->request->getData('id');
@@ -178,6 +229,16 @@ class ReportsController extends AppController
      */
     public function delete($id = null)
     {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->getData('id');
 

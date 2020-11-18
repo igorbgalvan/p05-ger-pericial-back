@@ -32,19 +32,18 @@ class UsersController extends AppController
         $this->Auth->allow(['add']);
     }
 
-    public function verifyUser()
-    {
-        if ($this->Auth->user()) {
-            $this->response->statusCode('200');
-            $data = ['user' => true];
-        } else {
-            $this->response->statusCode('400');
-            $data = ['user' => false];
-        }
-    }
-
     public function uploadPicture()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
 
         if ($this->request->is('post')) {
 
@@ -92,6 +91,16 @@ class UsersController extends AppController
      */
     public function viewUnUsers($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->Auth->user('role_id') == 2) {
             if ($this->Auth->user('confirmation') == true) {
                 $user = $this->Users->find('all', [
@@ -115,6 +124,15 @@ class UsersController extends AppController
 
     public function viewOne($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
 
 
         if ($this->Auth->user('confirmation') == true) {
@@ -134,6 +152,16 @@ class UsersController extends AppController
 
     public function viewUsers($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         if ($this->Auth->user('confirmation') == true) {
             $user = $this->Users->find('all', [
                 'conditions' => ['confirmation' => 1, 'actived' => 1]
@@ -152,6 +180,16 @@ class UsersController extends AppController
 
     public function authorizeUser($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['post', 'put']);
         if (true) {
             if ($this->Auth->user('role_id') == 2) {
@@ -207,6 +245,16 @@ class UsersController extends AppController
 
     public function promoteUser($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['post', 'put']);
         if (true) {
             if ($this->Auth->user('role_id') == 2) {
@@ -265,6 +313,16 @@ class UsersController extends AppController
      */
     public function add()
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
@@ -312,6 +370,16 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
         $this->request->allowMethod(['post', 'put']);
 
         $id = $this->request->getData('id');
@@ -376,6 +444,16 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+        
         $this->request->allowMethod(['post', 'delete']);
         $id = $this->request->getData('id');
         $user = $this->Users->get($id);
