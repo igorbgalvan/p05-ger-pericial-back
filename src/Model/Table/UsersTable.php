@@ -74,7 +74,7 @@ class UsersTable extends Table
 
         $validator
             ->scalar('phone')
-            ->maxLength('phone', 11)
+            ->maxLength('phone', 16)
             ->requirePresence('phone', 'create')
             ->notEmptyString('phone');
 
