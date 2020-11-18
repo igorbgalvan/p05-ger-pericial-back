@@ -39,7 +39,7 @@ class RequestsController extends AppController
             //$requests = $this->Requests->find('all');
 
             $requests = $this->Requests->find('all', [
-                'contain' => ['Vehicles', 'Victims', 'RequestDocuments'],
+                'contain' => ['Vehicles', 'Victims', 'RequestDocuments', 'Users'],
             ]);
 
 
