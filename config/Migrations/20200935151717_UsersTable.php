@@ -17,7 +17,7 @@ class UsersTable extends AbstractMigration
             ->addColumn('password', 'string', ['limit' => 255])
             ->addColumn('name', 'string', ['limit' => 255])
             ->addColumn('position', 'string', ['limit' => 255])
-            ->addColumn('phone', 'string', ['limit' => 11])
+            ->addColumn('phone', 'string', ['limit' => 16])
             ->addColumn('role_id', 'integer', [
                 'default' => '1',
             ])
