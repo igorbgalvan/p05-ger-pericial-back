@@ -313,16 +313,6 @@ class UsersController extends AppController
      */
     public function add()
     {
-        if(!$this->verifyUser()){
-
-            $this->response = $this->response->withStatus(400);
-            $data = ['message' => 'You need someone authorize you.'];
-
-            $this->set(compact('data'));
-            $this->set('_serialize', 'data');
-            return;
-        }
-
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
