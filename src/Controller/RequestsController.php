@@ -234,7 +234,7 @@ class RequestsController extends AppController
 
 
         if ($this->Auth->user('confirmation') == true) {
-            $requests = $this->Requests->find('all', ['conditions' => ['user_id' => $id]]);
+            $requests = $this->Requests->find('all', ['conditions' => ['user_id' => $id, 'concluido' => false]]);
 
             $this->response->statusCode('200');
             $data = ['requests' => $requests, 'error' => false];
