@@ -25,6 +25,7 @@ class Requests extends AbstractMigration
             ->addColumn('tipo_requisicao', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('exame_pericia', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('descricao', 'string', ['limit' => 600, 'null' => true])
+            ->addColumn('descricao_oficio', 'string', ['limit' => 600, 'null' => true])
             ->addColumn('nome_vitima', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('n_documento', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('n_bo', 'string', ['limit' => 255, 'null' => true])
@@ -40,7 +41,6 @@ class Requests extends AbstractMigration
             ->addColumn('cidade', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('n_laudos_expedidos', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('n_oficio', 'string', ['limit' => 255, 'null' => true])
-            ->addColumn('cargo', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('observacoes', 'string', ['limit' => 600, 'null' => true])
             ->addForeignKey('user_id', 'users', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->create();

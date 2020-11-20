@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
- * @property &\Cake\ORM\Association\HasMany $RequestDocuments
+ * @property \App\Model\Table\RequestDocumentsTable&\Cake\ORM\Association\HasMany $RequestDocuments
  * @property \App\Model\Table\VehiclesTable&\Cake\ORM\Association\BelongsToMany $Vehicles
  * @property \App\Model\Table\VictimsTable&\Cake\ORM\Association\BelongsToMany $Victims
  *
@@ -111,6 +111,11 @@ class RequestsTable extends Table
             ->allowEmptyString('descricao');
 
         $validator
+            ->scalar('descricao_oficio')
+            ->maxLength('descricao_oficio', 600)
+            ->allowEmptyString('descricao_oficio');
+
+        $validator
             ->scalar('nome_vitima')
             ->maxLength('nome_vitima', 255)
             ->allowEmptyString('nome_vitima');
@@ -184,11 +189,6 @@ class RequestsTable extends Table
             ->scalar('n_oficio')
             ->maxLength('n_oficio', 255)
             ->allowEmptyString('n_oficio');
-
-        $validator
-            ->scalar('cargo')
-            ->maxLength('cargo', 255)
-            ->allowEmptyString('cargo');
 
         $validator
             ->scalar('observacoes')

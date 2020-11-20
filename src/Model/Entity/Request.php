@@ -16,6 +16,7 @@ use Cake\ORM\Entity;
  * @property string|null $tipo_requisicao
  * @property string|null $exame_pericia
  * @property string|null $descricao
+ * @property string|null $descricao_oficio
  * @property string|null $nome_vitima
  * @property string|null $n_documento
  * @property string|null $n_bo
@@ -31,11 +32,11 @@ use Cake\ORM\Entity;
  * @property string|null $cidade
  * @property string|null $n_laudos_expedidos
  * @property string|null $n_oficio
- * @property string|null $cargo
  * @property string|null $observacoes
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Report[] $reports
+ * @property \App\Model\Entity\RequestDocument[] $request_documents
  * @property \App\Model\Entity\Vehicle[] $vehicles
  * @property \App\Model\Entity\Victim[] $victims
  */
@@ -60,6 +61,7 @@ class Request extends Entity
         'tipo_requisicao' => true,
         'exame_pericia' => true,
         'descricao' => true,
+        'descricao_oficio' => true,
         'nome_vitima' => true,
         'n_documento' => true,
         'n_bo' => true,
@@ -75,10 +77,10 @@ class Request extends Entity
         'cidade' => true,
         'n_laudos_expedidos' => true,
         'n_oficio' => true,
-        'cargo' => true,
         'observacoes' => true,
         'user' => true,
         'reports' => true,
+        'request_documents' => true,
         'vehicles' => true,
         'victims' => true,
     ];

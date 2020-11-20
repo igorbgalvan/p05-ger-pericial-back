@@ -70,6 +70,11 @@ class VehiclesTable extends Table
             ->maxLength('cor', 255)
             ->allowEmptyString('cor');
 
+        $validator
+            ->scalar('tipo_veiculo')
+            ->maxLength('tipo_veiculo', 255)
+            ->allowEmptyString('tipo_veiculo');
+
         return $validator;
     }
 }

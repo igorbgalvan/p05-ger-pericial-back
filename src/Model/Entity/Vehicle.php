@@ -7,9 +7,10 @@ use Cake\ORM\Entity;
  * Vehicle Entity
  *
  * @property int $id
- * @property string $marca
- * @property string $placa
- * @property string $cor
+ * @property string|null $marca
+ * @property string|null $placa
+ * @property string|null $cor
+ * @property string|null $tipo_veiculo
  *
  * @property \App\Model\Entity\Request[] $requests
  */
@@ -28,6 +29,7 @@ class Vehicle extends Entity
         'marca' => true,
         'placa' => true,
         'cor' => true,
+        'tipo_veiculo' => true,
         'requests' => true,
     ];
 }
