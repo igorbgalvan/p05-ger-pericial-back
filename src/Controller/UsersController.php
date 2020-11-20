@@ -430,7 +430,7 @@ class UsersController extends AppController
                     ->template('default')
                     ->send();
 
-                $this->createLog("O usuário " . $user->name . " se cadastrou no sistema");
+                $this->createLog("O usuário " . $user['name'] . " se cadastrou no sistema");
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been saved.'];
             } else {

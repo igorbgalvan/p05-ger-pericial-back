@@ -214,7 +214,8 @@ class ReportsController extends AppController
                 } else {
                     $this->response->statusCode('400');
                     $data = [
-                        'message' => 'Error while saving, contact the adminitrator.'
+                        'message' => 'Error while saving, contact the adminitrator.',
+                        'error' => $report->getErrors()
                     ];
                 }
             } else {
