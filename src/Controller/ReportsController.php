@@ -46,7 +46,7 @@ class ReportsController extends AppController
                     $data = ['message' => 'Not found this request.', 'error' => true];
                 }
             } else {
-                $reports = $this->Reports->find('all');
+                $reports = $this->Reports->find('all', ['contain' => ['Users']]);
 
                 $this->response->statusCode('200');
                 $data = ['reports' => $reports, 'error' => false];
