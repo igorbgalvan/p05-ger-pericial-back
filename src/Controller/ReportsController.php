@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Reports Controller
@@ -140,6 +141,12 @@ class ReportsController extends AppController
         $report = $this->Reports->newEntity();
         if ($this->request->is('post')) {
             $report = $this->Reports->patchEntity($report, $this->request->getData());
+            if($report['delivery_date'] != null){
+                $Requests = TableRegistry::getTableLocator()->get('requests');
+                $request = $Requests->get($report['request_id']);
+                $request->concluido = true;
+                $Requests->save($request);
+            }
             if ($this->Reports->save($report)) {
 
                 $this->response->withStatus(200);
@@ -193,6 +200,12 @@ class ReportsController extends AppController
 
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $report = $this->Reports->patchEntity($report, $this->request->getData());
+                if($report['delivery_date'] != null){
+                    $Requests = TableRegistry::getTableLocator()->get('requests');
+                    $request = $Requests->get($report['request_id']);
+                    $request->concluido = true;
+                    $Requests->save($request);
+                }
                 if ($this->Reports->save($report)) {
 
                     $this->response->withStatus(200);

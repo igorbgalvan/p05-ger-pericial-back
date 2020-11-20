@@ -195,6 +195,10 @@ class RequestsTable extends Table
             ->maxLength('observacoes', 600)
             ->allowEmptyString('observacoes');
 
+        $validator
+            ->boolean('concluido')
+            ->allowEmptyString('concluido');
+
         return $validator;
     }
 

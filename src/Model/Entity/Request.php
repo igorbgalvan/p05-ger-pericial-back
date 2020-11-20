@@ -33,6 +33,7 @@ use Cake\ORM\Entity;
  * @property string|null $n_laudos_expedidos
  * @property string|null $n_oficio
  * @property string|null $observacoes
+ * @property bool|null $concluido
  *
  * @property \App\Model\Entity\User $user
  * @property \App\Model\Entity\Report[] $reports
@@ -78,6 +79,7 @@ class Request extends Entity
         'n_laudos_expedidos' => true,
         'n_oficio' => true,
         'observacoes' => true,
+        'concluido' => true,
         'user' => true,
         'reports' => true,
         'request_documents' => true,

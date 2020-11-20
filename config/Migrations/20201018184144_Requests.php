@@ -42,6 +42,7 @@ class Requests extends AbstractMigration
             ->addColumn('n_laudos_expedidos', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('n_oficio', 'string', ['limit' => 255, 'null' => true])
             ->addColumn('observacoes', 'string', ['limit' => 600, 'null' => true])
+            ->addColumn('concluido', 'boolean', ['null' => true, 'default' => 0])
             ->addForeignKey('user_id', 'users', 'id', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
             ->create();
     }
