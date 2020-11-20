@@ -18,6 +18,7 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -95,5 +96,16 @@ class AppController extends Controller
             return true;
         else
             return false;
+    }
+
+    protected function createLog($message)
+    {
+        $Logs = TableRegistry::getTableLocator()->get('logs');
+
+        $data = ['message' => $message, 'user_id' => $this->Auth->user('id')];
+
+        $log = $Logs->newEntity();
+        $log = $Logs->patchEntity($log, $data);
+        $Logs->save($log);
     }
 }

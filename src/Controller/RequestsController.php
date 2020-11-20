@@ -117,6 +117,7 @@ class RequestsController extends AppController
                 if ($document) {
                     if ($RDocuments->delete($document)) {
                         unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
+                        $this->createLog("O usuário " . $this->Auth->user('name') . " deletou o documento na requisição " . $document->request_id . ", com nome de ". $document->title);
                         $this->response->statusCode('200');
                         $data = ['message' => 'Document has been deleted in database and system.', 'success' => true];
                     } else {
@@ -173,6 +174,7 @@ class RequestsController extends AppController
                 $requestDocument = $Documents->patchEntity($requestDocument, $data);
                 if ($this->Upload->uploadFile('documents', $name,  $this->request->data['document'])) {
                     if ($Documents->save($requestDocument)) {
+                        $this->createLog("O usuário " . $this->Auth->user('name') . " criou o documento na requisição " . $requestDocument['request_id'] . ", com nome de ". $requestDocument['title']);
                         $this->response->statusCode('200');
                         $data = ['message' => 'The document has been uploaded', 'success' => true];
                     } else {
@@ -361,6 +363,7 @@ class RequestsController extends AppController
 
             $request = $this->Requests->patchEntity($request, $allData);
             if ($this->Requests->save($request)) {
+                $this->createLog("O usuário " . $this->Auth->user('name') . " criou a requisição " . $request->id);
 
                 foreach ($vehicleData as $v) {
 
@@ -461,6 +464,8 @@ class RequestsController extends AppController
 
             $request = $this->Requests->patchEntity($request, $this->request->getData());
             if ($this->Requests->save($request)) {
+
+                $this->createLog("O usuário " . $this->Auth->user('name') . " editou a requisição " . $request->id);
 
                 $this->response->statusCode('200');
                 $data = ['message' => "A requisição foi salva com sucesso"];

@@ -148,7 +148,7 @@ class ReportsController extends AppController
                 $Requests->save($request);
             }
             if ($this->Reports->save($report)) {
-
+                $this->createLog("O usuário " . $this->Auth->user('name') . " salvou um laudo na requisição " . $report['request_id']);
                 $this->response->withStatus(200);
                 $data = ['message' => 'The report has been saved.'];
             } else {
@@ -207,6 +207,7 @@ class ReportsController extends AppController
                     $Requests->save($request);
                 }
                 if ($this->Reports->save($report)) {
+                    $this->createLog("O usuário " . $this->Auth->user('name') . " salvou um laudo na requisição " . $report['request_id']);
 
                     $this->response->withStatus(200);
                     $data = ['message' => 'The report has been saved.'];
@@ -257,6 +258,7 @@ class ReportsController extends AppController
 
         $report = $this->Reports->get($id);
         if ($this->Reports->delete($report)) {
+            $this->createLog("O usuário " . $this->Auth->user('name') . " deletou um laudo na requisição " . $report->request_id);
             $this->response->withStatus(200);
             $data = ['message' => 'The report has been deleted.'];
         } else {

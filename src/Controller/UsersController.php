@@ -239,6 +239,7 @@ class UsersController extends AppController
                             $user->confirmation = true;
 
                             if ($this->Users->save($user)) {
+                                $this->createLog("O usuário " . $user->name . " foi autorizado por " . $this->Auth->user('name'));
                                 $this->response->statusCode('200');
                                 $data = ['message' => 'the ' . $user->email . ' has been authorized.'];
                             } else {
@@ -303,6 +304,7 @@ class UsersController extends AppController
                             $user->actived = true;
 
                             if ($this->Users->save($user)) {
+                                $this->createLog("O usuário " . $user->name . " foi ativado por " . $this->Auth->user('name'));
                                 $this->response->statusCode('200');
                                 $data = ['message' => 'the ' . $user->name . ' has been actived.'];
                             } else {
@@ -368,6 +370,7 @@ class UsersController extends AppController
                             $user->role_id = 2;
 
                             if ($this->Users->save($user)) {
+                                $this->createLog("O usuário " . $user->name . " foi promovido a admin por " . $this->Auth->user('name'));
                                 $this->response->statusCode('200');
                                 $data = ['message' => 'the ' . $user->email . ' has been promoted.'];
                             } else {
@@ -427,6 +430,7 @@ class UsersController extends AppController
                     ->template('default')
                     ->send();
 
+                $this->createLog("O usuário " . $user->name . " se cadastrou no sistema");
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been saved.'];
             } else {
@@ -491,6 +495,9 @@ class UsersController extends AppController
 
                 $user = $this->Users->patchEntity($user, $data);
                 if ($this->Users->save($user)) {
+
+                    $this->createLog("O usuário " . $user->name . " foi editado por " . $this->Auth->user('name'));
+
                     $this->response->statusCode('200');
                     $this->Auth->setUser($user);
 
@@ -547,6 +554,8 @@ class UsersController extends AppController
         if ($this->Auth->user('id') == $user->id || $this->Auth->user('role_id') == 2) {
             $user->actived = 0;
             if ($this->Users->save($user)) {
+
+                $this->createLog("O usuário " . $user->name . " foi desativado por " . $this->Auth->user('name'));
                 $this->response->withStatus(200);
                 $data = ['message' => 'The user has been deleted.'];
             } else {
