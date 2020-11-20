@@ -207,7 +207,7 @@ class ReportsController extends AppController
                     $Requests->save($request);
                 }
                 if ($this->Reports->save($report)) {
-                    $this->createLog("O usuário " . $this->Auth->user('name') . " salvou um laudo na requisição " . $report['request_id']);
+                    $this->createLog("O usuário " . $this->Auth->user('name') . " editou um laudo na requisição " . $report['request_id']);
 
                     $this->response->withStatus(200);
                     $data = ['message' => 'The report has been saved.'];
