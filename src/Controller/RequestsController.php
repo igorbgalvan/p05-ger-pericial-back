@@ -185,7 +185,7 @@ class RequestsController extends AppController
 
             $requests = $Requests->find('all');
             $requests->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-            $requests->select(['Users.id', 'count' => $requests->func()->count('user_id')])->where(['Users.confirmation' => 1, 'Users.actived' => 1])->group(['Users.id']);
+            $requests->select(['Users.id', 'count' => $requests->func()->count('user_id')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'Users.position' => 'Perito Criminal'])->group(['Users.id']);
 
             if (json_decode(json_encode($requests))) {
 

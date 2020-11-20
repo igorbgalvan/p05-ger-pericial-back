@@ -122,6 +122,39 @@ class UsersController extends AppController
         $this->set('_serialize', 'data');
     }
 
+    public function viewInUsers($id = null)
+    {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
+        if ($this->Auth->user('role_id') == 2) {
+            if ($this->Auth->user('confirmation') == true) {
+                $user = $this->Users->find('all', [
+                    'conditions' => ['actived' => 0]
+                ]);
+
+                $this->response->statusCode('200');
+                $data = ['user' => $user];
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'You need someone authorize your request.'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'You are not a Admin'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     public function viewOne($id = null)
     {
         if(!$this->verifyUser()){
@@ -219,6 +252,70 @@ class UsersController extends AppController
                         } else {
                             $data = [
                                 'message' => 'This users is already authorized.',
+                            ];
+                        }
+                    } else {
+                        $this->response->statusCode('400');
+                        $data = ['message' => 'This user is not valid.'];
+                    }
+                } else {
+                    $this->response->statusCode('400');
+                    $data = ['message' => 'You need someone authorize your request.'];
+                }
+            } else {
+                $this->response->statusCode('400');
+                $data = ['message' => 'You are not a Admin'];
+            }
+        } else {
+            $this->response->statusCode('400');
+            $data = ['message' => 'the request needs to be post or put'];
+        }
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    public function activateUser($id = null)
+    {
+        if(!$this->verifyUser()){
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
+        $this->request->allowMethod(['post', 'put']);
+        if (true) {
+            if ($this->Auth->user('role_id') == 2) {
+                if ($this->Auth->user('confirmation') == true) {
+                    $id = $this->request->getData('id');
+                    $user = $this->Users->find('all', [
+                        'conditions' => ['id' => $id]
+                    ])->first();
+
+                    if ($user) {
+
+                        if ($user->actived == false) {
+
+                            $user->actived = true;
+
+                            if ($this->Users->save($user)) {
+                                $this->response->statusCode('200');
+                                $data = ['message' => 'the ' . $user->name . ' has been actived.'];
+                            } else {
+                                $errors = $user->getErrors();
+                                $this->response->statusCode('400');
+                                $data = [
+                                    'message' => 'Error while saving.',
+                                    'error' => $errors
+                                ];
+                            }
+                        } else {
+                            $data = [
+                                'message' => 'This user is already actived.',
                             ];
                         }
                     } else {
