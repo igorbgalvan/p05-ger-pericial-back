@@ -73,7 +73,7 @@ class ReportsController extends AppController
         }
 
         if ($this->Auth->user('confirmation') == true) {
-            $report = $this->Reports->find('all', ['conditions' => ['id' => $id]]);
+            $report = $this->Reports->find('all', ['conditions' => ['id' => $id], 'contain' => ['Users']]);
             $this->response->statusCode('200');
             $data = ['report' => $report, 'error' => false];
         } else {
