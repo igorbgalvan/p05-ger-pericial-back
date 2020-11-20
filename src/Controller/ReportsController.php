@@ -35,7 +35,7 @@ class ReportsController extends AppController
 
 
             if (isset($id)) {
-                $reports = $this->Reports->find('all', ['conditions' => ['request_id' => $id]]);
+                $reports = $this->Reports->find('all', ['conditions' => ['request_id' => $id], 'contain' => ['Users']]);
                 if (json_decode(json_encode($reports)) != []) {
 
                     $this->response->statusCode('200');
