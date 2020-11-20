@@ -21,7 +21,6 @@ class RequestsController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Upload');
-
     }
 
     /**
@@ -33,7 +32,7 @@ class RequestsController extends AppController
      */
     public function view($id = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -65,9 +64,41 @@ class RequestsController extends AppController
         $this->set('_serialize', 'data');
     }
 
+    public function viewByYear($year = null)
+    {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
+        $this->request->allowMethod(['get']);
+
+        if($year == null){
+            $year = date("Y");
+        }
+
+        $requests = $this->Requests->find('all', [
+            'contain' => ['Vehicles', 'Victims', 'RequestDocuments', 'Users'], 'conditions' =>['YEAR(data_documento)' => $year]
+        ]);
+
+
+        $this->response = $this->response->withStatus(200);
+        $data = ['requests' => $requests];
+
+
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     public function deleteDocument($docName = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -88,8 +119,7 @@ class RequestsController extends AppController
                         unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
                         $this->response->statusCode('200');
                         $data = ['message' => 'Document has been deleted in database and system.', 'success' => true];
-                    }
-                    else{
+                    } else {
                         $this->response->statusCode('400');
                         $data = ['message' => 'Document not deleted in database.', 'success' => false];
                     }
@@ -114,7 +144,7 @@ class RequestsController extends AppController
 
     public function uploadDocument()
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -167,7 +197,7 @@ class RequestsController extends AppController
 
     public function select()
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -222,7 +252,7 @@ class RequestsController extends AppController
 
     public function viewUser($id = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -249,7 +279,7 @@ class RequestsController extends AppController
 
     public function viewOne($id = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -291,7 +321,7 @@ class RequestsController extends AppController
      */
     public function add()
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -412,7 +442,7 @@ class RequestsController extends AppController
      */
     public function edit($id = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -454,7 +484,7 @@ class RequestsController extends AppController
      */
     public function delete($id = null)
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
