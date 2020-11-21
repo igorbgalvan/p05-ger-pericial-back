@@ -38,7 +38,7 @@ class LogsController extends AppController
             ]);
 
             $this->response->statusCode('400');
-            $data = ['logs' => $logs];
+            $data = ['logs' => $this->Logs];
         }
         else{
             $this->response->statusCode('400');
