@@ -39,7 +39,7 @@ class LogsController extends AppController
             $logs = $this->paginate($this->Logs);
 
             $this->response->statusCode('400');
-            $data = ['logs' => $logs];
+            $data = ['logs' => $logs, 'numbers' => $this->Paginator->numbers()];
         }
         else{
             $this->response->statusCode('400');
