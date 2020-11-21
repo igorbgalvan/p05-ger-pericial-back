@@ -78,12 +78,12 @@ class RequestsController extends AppController
 
         $this->request->allowMethod(['get']);
 
-        if($year == null){
+        if ($year == null) {
             $year = date("Y");
         }
 
         $requests = $this->Requests->find('all', [
-            'contain' => ['Vehicles', 'Victims', 'RequestDocuments', 'Users'], 'conditions' =>['YEAR(data_documento)' => $year]
+            'contain' => ['Vehicles', 'Victims', 'RequestDocuments', 'Users'], 'conditions' => ['YEAR(data_documento)' => $year]
         ]);
 
 
@@ -117,7 +117,7 @@ class RequestsController extends AppController
                 if ($document) {
                     if ($RDocuments->delete($document)) {
                         unlink(WWW_ROOT . 'files' . DS . 'documents' . DS . $docName);
-                        $this->createLog("O usuário " . $this->Auth->user('name') . " deletou o documento na requisição " . $document->request_id . ", com nome de ". $document->title);
+                        $this->createLog("O usuário " . $this->Auth->user('name') . " deletou o documento na requisição " . $document->request_id . ", com nome de " . $document->title);
                         $this->response->statusCode('200');
                         $data = ['message' => 'Document has been deleted in database and system.', 'success' => true];
                     } else {
@@ -174,7 +174,7 @@ class RequestsController extends AppController
                 $requestDocument = $Documents->patchEntity($requestDocument, $data);
                 if ($this->Upload->uploadFile('documents', $name,  $this->request->data['document'])) {
                     if ($Documents->save($requestDocument)) {
-                        $this->createLog("O usuário " . $this->Auth->user('name') . " criou o documento na requisição " . $requestDocument['request_id'] . ", com nome de ". $requestDocument['title']);
+                        $this->createLog("O usuário " . $this->Auth->user('name') . " criou o documento na requisição " . $requestDocument['request_id'] . ", com nome de " . $requestDocument['title']);
                         $this->response->statusCode('200');
                         $data = ['message' => 'The document has been uploaded', 'success' => true];
                     } else {
@@ -193,6 +193,37 @@ class RequestsController extends AppController
             $this->response->statusCode('400');
             $data = ['message' => 'Method Not Allowed'];
         }
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
+    function analysis()
+    {
+
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+
+        $Reports = TableRegistry::getTableLocator()->get('reports');
+
+        $waiting_req = $Reports->find('all');
+        $waiting_req->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+        $waiting_req->select(['Users.id', 'waiting request' => $waiting_req->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Aguardando requisição'])->group(['Users.id']);
+
+        $not_ready = $Reports->find('all');
+        $not_ready->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+        $not_ready->select(['Users.id', 'not ready' => $not_ready->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Não está pronto'])->group(['Users.id']);
+
+
+        $this->response = $this->response->withStatus(200);
+        $data = ["waiting request" => $waiting_req, 'not ready' => $not_ready];
+
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
     }
