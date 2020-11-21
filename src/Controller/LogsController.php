@@ -20,7 +20,7 @@ class LogsController extends AppController
      */
     public function view()
     {
-        if(!$this->verifyUser()){
+        if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
             $data = ['message' => 'You need someone authorize you.'];
@@ -34,14 +34,14 @@ class LogsController extends AppController
 
         if ($this->Auth->user('role_id') == 2) {
             $this->paginate = [
-                'contain' => ['Users'],
+                'contain' => ['Users'], 
+                'sortWhitelist' => ['created'],
             ];
-            $logs = $this->paginate($this->Logs);
+            $logs = $this->paginate($this->Logs)->order;
 
             $this->response->statusCode('400');
-            $data = ['logs' => $logs, 'numbers' => $this->Paginator->numbers()];
-        }
-        else{
+            $data = ['logs' => $logs];
+        } else {
             $this->response->statusCode('400');
             $data = ['message' => 'You are not a Admin'];
         }
