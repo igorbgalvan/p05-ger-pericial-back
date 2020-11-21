@@ -37,7 +37,7 @@ class LogsController extends AppController
                 'contain' => ['Users'], 
                 'order' => ['created' => 'desc'],
             ];
-            $logs = $this->paginate($this->Logs)->order;
+            $logs = $this->paginate($this->Logs);
 
             $this->response->statusCode('400');
             $data = ['logs' => $logs];
