@@ -35,7 +35,7 @@ class LogsController extends AppController
         if ($this->Auth->user('role_id') == 2) {
             $this->paginate = [
                 'contain' => ['Users'], 
-                'sortWhitelist' => ['created'],
+                'order' => ['created' => 'desc'],
             ];
             $logs = $this->paginate($this->Logs)->order;
 
