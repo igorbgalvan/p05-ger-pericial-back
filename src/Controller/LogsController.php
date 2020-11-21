@@ -23,7 +23,7 @@ class LogsController extends AppController
         if (!$this->verifyUser()) {
 
             $this->response = $this->response->withStatus(400);
-            $data = ['message' => 'You need someone authorize you.'];
+            $data = ['message' => 'You need someone authorize you.', 'error' => true];
 
             $this->set(compact('data'));
             $this->set('_serialize', 'data');
@@ -40,10 +40,10 @@ class LogsController extends AppController
             $logs = $this->paginate($this->Logs);
 
             $this->response->statusCode('400');
-            $data = ['logs' => $logs];
+            $data = ['logs' => $logs, 'error' => false];
         } else {
             $this->response->statusCode('400');
-            $data = ['message' => 'You are not a Admin'];
+            $data = ['message' => 'You are not a Admin', 'error' => true];
         }
 
         $this->set(compact('data'));
