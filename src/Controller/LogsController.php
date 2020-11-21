@@ -33,12 +33,13 @@ class LogsController extends AppController
         $this->request->allowMethod(['get']);
 
         if ($this->Auth->user('role_id') == 2) {
-            $logs = $this->Logs->find('all', [
-                'contain' => ['Users']
-            ]);
+            $this->paginate = [
+                'contain' => ['Users'],
+            ];
+            $logs = $this->paginate($this->Logs);
 
             $this->response->statusCode('400');
-            $data = ['logs' => $this->Logs];
+            $data = ['logs' => $logs];
         }
         else{
             $this->response->statusCode('400');
