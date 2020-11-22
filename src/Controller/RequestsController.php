@@ -220,7 +220,6 @@ class RequestsController extends AppController
         $not_ready->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
         $not_ready->select(['Users.id', 'not ready' => $not_ready->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Não está pronto'])->group(['Users.id']);
 
-
         $this->response = $this->response->withStatus(200);
         $data = ["waiting request" => $waiting_req, 'not ready' => $not_ready];
 

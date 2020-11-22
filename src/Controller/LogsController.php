@@ -39,11 +39,11 @@ class LogsController extends AppController
             ];
             $logs = $this->paginate($this->Logs);
 
-            $this->response->statusCode('400');
-            $data = ['logs' => $logs, 'error' => false];
+            $this->response->statusCode('200');
+            $data = ['logs' => $logs, 'error' => false, 'code' => '200'];
         } else {
-            $this->response->statusCode('400');
-            $data = ['message' => 'You are not a Admin', 'error' => true];
+            $this->response->statusCode('404');
+            $data = ['message' => 'You are not a Admin', 'error' => true, 'code' => '404'];
         }
 
         $this->set(compact('data'));
