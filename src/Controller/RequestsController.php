@@ -214,14 +214,14 @@ class RequestsController extends AppController
 
         $waiting_req = $Reports->find('all');
         $waiting_req->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $waiting_req->select(['Users.id', 'waiting request' => $waiting_req->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Aguardando requisição'])->group(['Users.id']);
+        $waiting_req->select(['Users.name', 'waiting request' => $waiting_req->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Aguardando requisição'])->group(['Users.id']);
 
         $not_ready = $Reports->find('all');
         $not_ready->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $not_ready->select(['Users.id', 'not ready' => $not_ready->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Não está pronto'])->group(['Users.id']);
+        $not_ready->select(['Users.name', 'not ready' => $not_ready->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Não está pronto'])->group(['Users.id']);
 
         $this->response = $this->response->withStatus(200);
-        $data = ["waiting request" => $waiting_req, 'not ready' => $not_ready];
+        $data = ["waiting_request" => $waiting_req, 'not_ready' => $not_ready];
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
