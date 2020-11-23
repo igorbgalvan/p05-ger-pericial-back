@@ -229,15 +229,28 @@ class RequestsController extends AppController
             for ($i = 0; $i < sizeof($users); $i++) {
                 if ($analysi->Users['name'] == $users[$i]) {
                     if (!isset($data['analysi' . $i])) {
-                        $data['analysi' . $i] = [$analysi->status => $analysi->count, 'name' => $users[$i]];
-                    } else
-                        $data['analysi' . $i] += [$analysi->status => $analysi->count];
+                        if ($analysi->status == 'Não está pronto')
+                            $data['analysi' . $i] = ['not_ready' => $analysi->count, 'name' => $users[$i]];
+                        else if ($analysi->status == 'Aguardando requisição')
+                            $data['analysi' . $i] = ['waiting_request' => $analysi->count, 'name' => $users[$i]];
+                    } else {
+                        if ($analysi->status == 'Não está pronto')
+                            $data['analysi' . $i] += ['not_ready' => $analysi->count];
+                        else if ($analysi->status == 'Aguardando requisição')
+                            $data['analysi' . $i] += ['waiting_request' => $analysi->count];
+                    }
                 }
             }
         }
 
+
+        $total_analysis = $Reports->find('all');
+        $total_analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+        $total_analysis->select(['Users.name', 'count' => $total_analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1])->group(['Users.name']);
+
+
         $this->response = $this->response->withStatus(200);
-        $data = ["analysis" => $data];
+        $data = ["analysis" => $data, "total_analysis" => $total_analysis];
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
