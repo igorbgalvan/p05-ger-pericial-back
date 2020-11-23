@@ -245,8 +245,7 @@ class RequestsController extends AppController
 
 
         $total_analysis = $Reports->find('all');
-        $total_analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $total_analysis->select(['Users.name', 'count' => $total_analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1])->group(['Users.name']);
+        $total_analysis->select(['status', 'count' => $total_analysis->func()->count('status')])->where(['OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status']);
 
 
         $this->response = $this->response->withStatus(200);
