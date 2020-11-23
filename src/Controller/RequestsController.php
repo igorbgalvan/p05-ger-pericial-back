@@ -228,7 +228,10 @@ class RequestsController extends AppController
         foreach ($analysis as $key => $analysi) {
             for ($i = 0; $i < sizeof($users); $i++) {
                 if ($analysi->Users['name'] == $users[$i]) {
-                        array_push($data, [$analysi->status => $analysi->count, 'name' => $users[$i]]);
+                    if (!isset($data['analysi' . $i])) {
+                        $data['analysi' . $i] = [$analysi->status => $analysi->count, 'name' => $users[$i]];
+                    } else
+                        $data['analysi' . $i] += [$analysi->status => $analysi->count];
                 }
             }
         }
