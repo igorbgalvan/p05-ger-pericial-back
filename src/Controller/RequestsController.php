@@ -212,18 +212,32 @@ class RequestsController extends AppController
 
         $Reports = TableRegistry::getTableLocator()->get('reports');
 
-        $waiting_req = $Reports->find('all');
-        $waiting_req->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $waiting_req->select(['Users.name', 'waiting request' => $waiting_req->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Aguardando requisição'])->group(['Users.id']);
+        $analysis = $Reports->find('all');
+        $analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+        $analysis->select(['Users.name', 'status', 'count' => $analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status', 'Users.name']);
 
-        $not_ready = $Reports->find('all');
-        $not_ready->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $not_ready->select(['Users.name', 'not ready' => $not_ready->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'status' => 'Não está pronto'])->group(['Users.id']);
+        $users = array();
+        foreach ($analysis as $key => $analysi) {
+            if (!in_array($analysi->Users['name'], $users))
+                array_push($users, $analysi->Users['name']);
+        }
 
-        $analysis = ['waiting_request' => $waiting_req, 'not_ready' => $not_ready];
+
+        $data = array();
+
+        foreach ($analysis as $key => $analysi) {
+            for ($i = 0; $i < sizeof($users); $i++) {
+                if ($analysi->Users['name'] == $users[$i]) {
+                    if (!isset($data[$users[$i]])) {
+                        $data[$users[$i]] =  [$analysi->status => $analysi->count];
+                    } else
+                        $data[$users[$i]] += [$analysi->status => $analysi->count];
+                }
+            }
+        }
 
         $this->response = $this->response->withStatus(200);
-        $data = ["analysis" => $analysis];
+        $data = ["analysis" => $data];
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
