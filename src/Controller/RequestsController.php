@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\ORM\Rule\ExistsIn;
 use Cake\ORM\TableRegistry;
+use Cake\Datasource\ConnectionManager;
+
+
 
 /**
  * Requests Controller
@@ -197,6 +200,38 @@ class RequestsController extends AppController
         $this->set('_serialize', 'data');
     }
 
+    function userReport()
+    {
+        if (!$this->verifyUser()) {
+
+            $this->response = $this->response->withStatus(400);
+            $data = ['message' => 'You need someone authorize you.'];
+
+            $this->set(compact('data'));
+            $this->set('_serialize', 'data');
+            return;
+        }
+        $this->request->allowMethod(['get']);
+
+        $Reports = TableRegistry::getTableLocator()->get('requests');
+
+        $analysis = $Reports->find('all');
+        $analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
+        $analysis->select(['Users.name', 'exame_pericia', 'count' => $analysis->func()->count('exame_pericia')])->where(['Users.confirmation' => 1, 'Users.actived' => 1])->group(['exame_pericia', 'Users.name']);
+
+        $users = array();
+        foreach ($analysis as $key => $analysi) {
+            if (!in_array($analysi->Users['name'], $users))
+                array_push($users, $analysi->Users['name']);
+        }
+
+        $this->response = $this->response->withStatus(200);
+        $data = ["analysis" => $analysis];
+
+        $this->set(compact('data'));
+        $this->set('_serialize', 'data');
+    }
+
     function analysis()
     {
 
@@ -209,6 +244,8 @@ class RequestsController extends AppController
             $this->set('_serialize', 'data');
             return;
         }
+
+        $this->request->allowMethod(['get']);
 
         $Reports = TableRegistry::getTableLocator()->get('reports');
 
@@ -273,9 +310,13 @@ class RequestsController extends AppController
 
             $Requests = TableRegistry::getTableLocator()->get('requests');
 
-            $requests = $Requests->find('all');
-            $requests->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-            $requests->select(['Users.id', 'count' => $requests->func()->count('user_id')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'Users.position' => 'Perito Criminal'])->group(['Users.id']);
+            // SELECT users.id, COUNT(user_id) from (select * from requests where requests.tipo_ocorrencia = 'interna') as requests RIGHT join users on (user_id = users.id)
+            // WHERE users.actived = 1 AND users.confirmation = 1 AND users.position = "Perito Criminal"
+            // GROUP by users.id
+
+            $connection = ConnectionManager::get('default');
+            $requests = $connection->execute('SELECT users.id, COUNT(user_id) as count from (select * from requests where requests.tipo_ocorrencia = "interna") as requests 
+            RIGHT join users on (user_id = users.id) WHERE users.actived = 1 AND users.confirmation = 1 AND users.position = "Perito Criminal" GROUP by users.id ')->fetchAll('assoc');
 
             if (json_decode(json_encode($requests))) {
 
@@ -283,14 +324,16 @@ class RequestsController extends AppController
                 $min_values = array();
 
                 foreach ($requests as $request) {
-                    $user_count[$request['Users']['id']] = $request['count'];
+                    $user_count[$request['id']] = $request['count'];
                 }
+
                 $min = min($user_count);
 
                 foreach ($user_count as $key => $value) {
                     if ($value === $min)
                         $min_values[$key] = $value;
                 }
+
 
                 $user = array_rand($min_values, 1);
 

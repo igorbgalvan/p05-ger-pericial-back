@@ -23,8 +23,8 @@ class UploadComponent extends Component
 
 
         if (is_uploaded_file($file_tmp_name)) {
-            move_uploaded_file($file_tmp_name, $dir . DS . $uniqName);
-            return true;
+            if(move_uploaded_file($file_tmp_name, $dir . DS . $uniqName))
+                return true;
         }
         return false;
     }
