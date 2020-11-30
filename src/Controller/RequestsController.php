@@ -215,22 +215,42 @@ class RequestsController extends AppController
 
         $Reports = TableRegistry::getTableLocator()->get('requests');
 
-       // SELECT users.id, requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
-       //from (select * from requests where tipo_pericia is not null AND tipo_pericia != '' AND exame_pericia is not null AND exame_pericia != '') as requests RIGHT join users on (user_id = users.id) 
-       //WHERE users.actived = 1 AND users.confirmation = 1 group by requests.tipo_pericia, requests.exame_pericia, users.id
+        // SELECT users.id, requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
+        //from (select * from requests where tipo_pericia is not null AND tipo_pericia != '' AND exame_pericia is not null AND exame_pericia != '') as requests RIGHT join users on (user_id = users.id) 
+        //WHERE users.actived = 1 AND users.confirmation = 1 group by requests.tipo_pericia, requests.exame_pericia, users.id
 
-       $connection = ConnectionManager::get('default');
-       $analysis = $connection->execute('SELECT requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
+        $connection = ConnectionManager::get('default');
+        $analysis = $connection->execute('SELECT requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) as count
        from (select * from requests where tipo_pericia is not null AND tipo_pericia != "" AND exame_pericia is not null AND exame_pericia != "") as requests
        group by requests.tipo_pericia, requests.exame_pericia')->fetchAll('assoc');
 
 
-        
-        // $users = array();
-        // foreach ($analysis as $key => $analysi) {
-        //     if (!in_array($analysi->Users['name'], $users))
-        //         array_push($users, $analysi->Users['name']);
-        // }
+
+        $exames = array();
+        foreach ($analysis as $key => $analysi) {
+            if (!in_array($analysi['tipo_pericia'], $exames))
+                array_push($exames, $analysi['tipo_pericia']);
+        }
+
+
+        $data = array();
+
+        foreach ($analysis as $key => $analysi) {
+            for ($i = 0; $i < sizeof($exames); $i++) {
+                if ($analysi['tipo_pericia'] == $exames[$i]) {
+                    if (!isset($data[$exames[$i]]))
+                        $data[$exames[$i]] = [$analysi['exame_pericia'] => $analysi['count']];
+                    else
+                        $data[$exames[$i]] += [$analysi['exame_pericia'] => $analysi['count']];
+                }
+            }
+        }
+
+        echo '<pre';
+        var_dump($data);
+        die;
+
+
 
         $this->response = $this->response->withStatus(200);
         $data = ["analysis" => $analysis];
