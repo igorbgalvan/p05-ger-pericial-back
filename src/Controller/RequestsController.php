@@ -213,6 +213,19 @@ class RequestsController extends AppController
         }
         $this->request->allowMethod(['get']);
 
+        $year = $this->request->getQuery('year');
+        $month_start =  $this->request->getQuery('month_start');
+        $month_end = $this->request->getQuery('month_end');
+
+        if (!isset($year))
+            $year = date("Y");
+        if (!isset($month_start))
+            $month_start = date('m');
+        if (!isset($month_end))
+            $month_end = date('m');
+
+
+
         $Reports = TableRegistry::getTableLocator()->get('requests');
 
         // SELECT users.id, requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
@@ -222,6 +235,7 @@ class RequestsController extends AppController
         $connection = ConnectionManager::get('default');
         $analysis = $connection->execute('SELECT requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) as count
             from (select * from requests where tipo_pericia is not null AND tipo_pericia != "" AND exame_pericia is not null AND exame_pericia != "") as requests
+            WHERE requests.data_documento BETWEEN "'. $year .'-'. $month_start .'-01" AND "'. $year .'-'. $month_end .'-31"
             group by requests.tipo_pericia, requests.exame_pericia')->fetchAll('assoc');
 
 
