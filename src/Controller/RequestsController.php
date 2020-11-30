@@ -221,8 +221,8 @@ class RequestsController extends AppController
 
         $connection = ConnectionManager::get('default');
         $analysis = $connection->execute('SELECT requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) as count
-       from (select * from requests where tipo_pericia is not null AND tipo_pericia != "" AND exame_pericia is not null AND exame_pericia != "") as requests
-       group by requests.tipo_pericia, requests.exame_pericia')->fetchAll('assoc');
+            from (select * from requests where tipo_pericia is not null AND tipo_pericia != "" AND exame_pericia is not null AND exame_pericia != "") as requests
+            group by requests.tipo_pericia, requests.exame_pericia')->fetchAll('assoc');
 
 
 
@@ -246,14 +246,8 @@ class RequestsController extends AppController
             }
         }
 
-        echo '<pre';
-        var_dump($data);
-        die;
-
-
-
         $this->response = $this->response->withStatus(200);
-        $data = ["analysis" => $analysis];
+        $data = ["analysis" => $data];
 
         $this->set(compact('data'));
         $this->set('_serialize', 'data');
