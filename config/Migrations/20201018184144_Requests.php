@@ -15,7 +15,7 @@ class Requests extends AbstractMigration
     {
         $table = $this->table('requests');
         $table->addColumn('data_documento', 'date', ['null' => true])
-            ->addColumn('user_id', 'integer')
+            ->addColumn('user_id', 'integer', ['null' => true])
             ->addColumn('data_realizacao_pericia', 'date', ['null' => true])
             ->addColumn('data_recebimento', 'date', ['null' => true])
             ->addColumn('tipo_pericia', 'string', ['limit' => 255, 'null' => true])
