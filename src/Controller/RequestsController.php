@@ -215,15 +215,22 @@ class RequestsController extends AppController
 
         $Reports = TableRegistry::getTableLocator()->get('requests');
 
-        $analysis = $Reports->find('all');
-        $analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $analysis->select(['Users.name', 'exame_pericia', 'count' => $analysis->func()->count('exame_pericia')])->where(['Users.confirmation' => 1, 'Users.actived' => 1])->group(['exame_pericia', 'Users.name']);
+       // SELECT users.id, requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
+       //from (select * from requests where tipo_pericia is not null AND tipo_pericia != '' AND exame_pericia is not null AND exame_pericia != '') as requests RIGHT join users on (user_id = users.id) 
+       //WHERE users.actived = 1 AND users.confirmation = 1 group by requests.tipo_pericia, requests.exame_pericia, users.id
 
-        $users = array();
-        foreach ($analysis as $key => $analysi) {
-            if (!in_array($analysi->Users['name'], $users))
-                array_push($users, $analysi->Users['name']);
-        }
+       $connection = ConnectionManager::get('default');
+       $analysis = $connection->execute('SELECT requests.tipo_pericia, requests.exame_pericia, count(requests.exame_pericia) 
+       from (select * from requests where tipo_pericia is not null AND tipo_pericia != "" AND exame_pericia is not null AND exame_pericia != "") as requests
+       group by requests.tipo_pericia, requests.exame_pericia')->fetchAll('assoc');
+
+
+        
+        // $users = array();
+        // foreach ($analysis as $key => $analysi) {
+        //     if (!in_array($analysi->Users['name'], $users))
+        //         array_push($users, $analysi->Users['name']);
+        // }
 
         $this->response = $this->response->withStatus(200);
         $data = ["analysis" => $analysis];
@@ -251,7 +258,7 @@ class RequestsController extends AppController
 
         $analysis = $Reports->find('all');
         $analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $analysis->select(['Users.name', 'status', 'count' => $analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status', 'Users.name']);
+        $analysis->select(['Users.name', 'data_documento', 'status', 'count' => $analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status', 'Users.name']);
 
         $users = array();
         foreach ($analysis as $key => $analysi) {
