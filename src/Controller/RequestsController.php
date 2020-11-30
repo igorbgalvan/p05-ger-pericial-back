@@ -258,7 +258,7 @@ class RequestsController extends AppController
 
         $analysis = $Reports->find('all');
         $analysis->rightJoin(['Users' => 'users'], ['Users.id = user_id']);
-        $analysis->select(['Users.name', 'data_documento', 'status', 'count' => $analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status', 'Users.name']);
+        $analysis->select(['Users.name', 'status', 'count' => $analysis->func()->count('status')])->where(['Users.confirmation' => 1, 'Users.actived' => 1, 'OR' => [['status' => 'Não está pronto'], ['status' => 'Aguardando requisição']]])->group(['status', 'Users.name']);
 
         $users = array();
         foreach ($analysis as $key => $analysi) {
