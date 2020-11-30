@@ -44,6 +44,7 @@ Para usar Gerenciador pericial, estas são as opções:
 * Abra o navegador e digite o endereço explicitado pelo seu servidor.
 * Ao abrir a aplicação você poderá:
   * Se cadastrar;
+  * Fazer login;
   * Recuperar senha perdida;
   * Editar perfil;
   * Alterar foto de perfíl;
@@ -52,7 +53,7 @@ Para usar Gerenciador pericial, estas são as opções:
   * Desativar um usuário (Administrador);
   * Ativar um usuário (Administrador);
   * Ver todos os usuários cadastrados no sistema;
-  * Cadastrador requisições de perícia;
+  * Cadastrar requisições de perícia;
   * Cadastrar laudos encima dessas requisições;
   * listar todas as requisições;
   * listar todos os laudos;
