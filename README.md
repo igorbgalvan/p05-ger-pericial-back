@@ -84,7 +84,6 @@ Para usar Gerenciador pericial, estas são as opções:
 As seguintes pessoas contribuiram para este projeto:
 
 * Igor Galvan (https://github.com/igorbgalvan)
-* Jefferson Henrique (https://github.com/JeffHenriqueM)
 
 ## Licença de uso
 
