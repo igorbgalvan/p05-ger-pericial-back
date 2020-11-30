@@ -96,6 +96,11 @@ class RequestsTable extends Table
             ->allowEmptyString('tipo_ocorrencia');
 
         $validator
+            ->scalar('tipo_ocorrencia_descricao')
+            ->maxLength('tipo_ocorrencia_descricao', 255)
+            ->allowEmptyString('tipo_ocorrencia_descricao');
+
+        $validator
             ->scalar('tipo_requisicao')
             ->maxLength('tipo_requisicao', 255)
             ->allowEmptyString('tipo_requisicao');

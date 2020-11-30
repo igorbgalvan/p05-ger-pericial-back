@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate|null $data_recebimento
  * @property string|null $tipo_pericia
  * @property string|null $tipo_ocorrencia
+ * @property string|null $tipo_ocorrencia_descricao
  * @property string|null $tipo_requisicao
  * @property string|null $exame_pericia
  * @property string|null $descricao
@@ -59,6 +60,7 @@ class Request extends Entity
         'data_recebimento' => true,
         'tipo_pericia' => true,
         'tipo_ocorrencia' => true,
+        'tipo_ocorrencia_descricao' => true,
         'tipo_requisicao' => true,
         'exame_pericia' => true,
         'descricao' => true,
