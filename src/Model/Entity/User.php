@@ -1,7 +1,6 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
@@ -16,8 +15,16 @@ use Cake\ORM\Entity;
  * @property int $role_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ * @property bool $confirmation
+ * @property string $email_confirmed
+ * @property bool $actived
+ * @property string|null $profile_picture
  *
  * @property \App\Model\Entity\Role $role
+ * @property \App\Model\Entity\Log[] $logs
+ * @property \App\Model\Entity\Report[] $reports
+ * @property \App\Model\Entity\Request[] $requests
+ * @property \App\Model\Entity\Token[] $tokens
  */
 class User extends Entity
 {
@@ -37,13 +44,17 @@ class User extends Entity
         'position' => true,
         'phone' => true,
         'role_id' => true,
-        'profile_picture' => true,
-        'actived' => true,
-        'email_confirmed' => true,
-        'confirmation' => true,
         'created' => true,
         'modified' => true,
+        'confirmation' => true,
+        'email_confirmed' => true,
+        'actived' => true,
+        'profile_picture' => true,
         'role' => true,
+        'logs' => true,
+        'reports' => true,
+        'requests' => true,
+        'tokens' => true,
     ];
 
     /**
@@ -54,11 +65,4 @@ class User extends Entity
     protected $_hidden = [
         'password',
     ];
-
-    protected function _setPassword($password)
-    {
-        if (strlen($password) > 0) {
-          return (new DefaultPasswordHasher)->hash($password);
-        }
-    }
 }

@@ -10,6 +10,10 @@ use Cake\Validation\Validator;
  * Users Model
  *
  * @property \App\Model\Table\RolesTable&\Cake\ORM\Association\BelongsTo $Roles
+ * @property \App\Model\Table\LogsTable&\Cake\ORM\Association\HasMany $Logs
+ * @property \App\Model\Table\ReportsTable&\Cake\ORM\Association\HasMany $Reports
+ * @property \App\Model\Table\RequestsTable&\Cake\ORM\Association\HasMany $Requests
+ * @property \App\Model\Table\TokensTable&\Cake\ORM\Association\HasMany $Tokens
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -35,6 +39,27 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->setTable('users');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Roles', [
+            'foreignKey' => 'role_id',
+            'joinType' => 'INNER',
+        ]);
+        $this->hasMany('Logs', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Reports', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Requests', [
+            'foreignKey' => 'user_id',
+        ]);
+        $this->hasMany('Tokens', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**
@@ -78,6 +103,24 @@ class UsersTable extends Table
             ->requirePresence('phone', 'create')
             ->notEmptyString('phone');
 
+        $validator
+            ->boolean('confirmation')
+            ->notEmptyString('confirmation');
+
+        $validator
+            ->scalar('email_confirmed')
+            ->maxLength('email_confirmed', 255)
+            ->notEmptyString('email_confirmed');
+
+        $validator
+            ->boolean('actived')
+            ->notEmptyString('actived');
+
+        $validator
+            ->scalar('profile_picture')
+            ->maxLength('profile_picture', 60)
+            ->allowEmptyFile('profile_picture');
+
         return $validator;
     }
 
@@ -90,7 +133,8 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']), ['message' => 'The email is not unique']);
+        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['role_id'], 'Roles'));
 
         return $rules;
     }
