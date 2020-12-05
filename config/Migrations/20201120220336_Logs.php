@@ -13,7 +13,7 @@ class Logs extends AbstractMigration
     public function change()
     {
         $table = $this->table('logs');
-        $table->addColumn('user_id', 'integer')
+        $table->addColumn('user_id', 'integer', ['null' => true])
             ->addColumn('message', 'string', ['limit' => 255])
             ->addColumn('created', 'datetime', [
                 'default' => 'CURRENT_TIMESTAMP',

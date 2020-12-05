@@ -7,7 +7,7 @@ use Cake\ORM\Entity;
  * Log Entity
  *
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
  * @property string $message
  * @property \Cake\I18n\FrozenTime $created
  *
