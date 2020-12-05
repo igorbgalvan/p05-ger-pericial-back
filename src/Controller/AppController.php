@@ -102,7 +102,12 @@ class AppController extends Controller
     {
         $Logs = TableRegistry::getTableLocator()->get('logs');
 
-        $data = ['message' => $message, 'user_id' => $this->Auth->user('id')];
+        if($this->Auth->user('id'))
+            $user_id = $this->Auth->user('id');
+        else
+            $user_id = null;
+
+        $data = ['message' => $message, 'user_id' => $user_id];
 
         $log = $Logs->newEntity();
         $log = $Logs->patchEntity($log, $data);
