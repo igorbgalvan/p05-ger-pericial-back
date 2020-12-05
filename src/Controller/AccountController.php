@@ -123,7 +123,7 @@ class AccountController extends AppController
                     if ($Tokens->delete($token)) {
                         $user->password = $password;
                         if ($Users->save($user)) {
-                            $this->createLog("Senha do usuário " . $this->Auth->user('name') . " foi trocada com sucesso");
+                            $this->createLog("Senha do usuário " . $user->name . " foi trocada com sucesso");
                             $this->response->statusCode('200');
                             $data = [
                                 'message' => 'The password has been changed.',
