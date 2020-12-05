@@ -32,12 +32,18 @@ class LogsController extends AppController
 
         $this->request->allowMethod(['get']);
 
+        $search = $this->request->getQuery('search');
+
         if ($this->Auth->user('role_id') == 2) {
             $this->paginate = [
-                'contain' => ['Users'], 
+                'contain' => ['Users'],
                 'order' => ['created' => 'desc'],
             ];
-            $logs = $this->paginate($this->Logs);
+            if ($search != null)
+                $logs = $this->paginate($this->Logs->find('all')->where(['message like' => "%" . $search . "%"]));
+            else
+                $logs = $this->paginate($this->Logs);
+
 
             $this->response->statusCode('200');
             $data = ['logs' => $logs, 'error' => false, 'code' => '200'];
