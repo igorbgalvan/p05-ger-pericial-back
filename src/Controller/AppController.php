@@ -102,7 +102,7 @@ class AppController extends Controller
     {
         $Logs = TableRegistry::getTableLocator()->get('logs');
 
-        if($this->Auth->user('id'))
+        if($this->Auth->user())
             $user_id = $this->Auth->user('id');
         else
             $user_id = null;
