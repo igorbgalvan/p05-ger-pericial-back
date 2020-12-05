@@ -119,6 +119,9 @@ class AccountController extends AppController
 
                 if ($token) {
 
+                    var_dump('entrou');
+                    die;
+
                     if (password_verify($tokenCode, $token->token)) {
                         if ($Tokens->delete($token)) {
                             $user->password = $password;
