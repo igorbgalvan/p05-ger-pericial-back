@@ -99,58 +99,50 @@ class AccountController extends AppController
 
     public function changePass()
     {
-        if ($this->request->is('post')) {
-            $data = $this->request->getData();
-            $Tokens = TableRegistry::getTableLocator()->get('Tokens');
-            $Users = TableRegistry::getTableLocator()->get('Users');
 
-            $data = $this->request->getData();
-            $id = $data['id'];
-            $tokenCode = $data['tokenCode'];
-            $password = $data['password'];
-            $user = $Users->get($id);
+        $this->request->allowMethod(['post']);
+
+        $data = $this->request->getData();
+        $Tokens = TableRegistry::getTableLocator()->get('Tokens');
+        $Users = TableRegistry::getTableLocator()->get('Users');
+
+        $data = $this->request->getData();
+        $id = $data['id'];
+        $tokenCode = $data['tokenCode'];
+        $password = $data['password'];
+        $user = $Users->get($id);
+
+        if ($user) {
+            $token = $Tokens->find('all', [
+                'conditions' => ['user_id' => $id]
+            ])->order(['expiration' => 'DESC'])->first();
 
 
-            if ($user) {
-                $token = $Tokens->find('all', [
-                    'conditions' => ['user_id' => $id]
-                ])->order(['expiration' => 'DESC'])->first();
-
-
-                if ($token) {
-
-                    var_dump('entrou');
-                    die;
-
-                    if (password_verify($tokenCode, $token->token)) {
-                        if ($Tokens->delete($token)) {
-                            $user->password = $password;
-                            if ($Users->save($user)) {
-                                $this->createLog("Senha do usuário " . $this->Auth->user('name') . " foi trocada com sucesso");
-                                $this->response->statusCode('200');
-                                $data = [
-                                    'message' => 'The password has been changed.',
-                                    'error' => false
-                                ];
-                            } else {
-                                $this->response->statusCode('400');
-                                $data = [
-                                    'message' => 'The password has not been changed. Please, try again.',
-                                    'error' => true
-                                ];
-                            }
+            if ($token) {
+                if (password_verify($tokenCode, $token->token)) {
+                    if ($Tokens->delete($token)) {
+                        var_dump($token);
+                        die;
+                        $user->password = $password;
+                        if ($Users->save($user)) {
+                            $this->createLog("Senha do usuário " . $this->Auth->user('name') . " foi trocada com sucesso");
+                            $this->response->statusCode('200');
+                            $data = [
+                                'message' => 'The password has been changed.',
+                                'error' => false
+                            ];
+                        } else {
+                            $this->response->statusCode('400');
+                            $data = [
+                                'message' => 'The password has not been changed. Please, try again.',
+                                'error' => true
+                            ];
                         }
-                    } else {
-                        $this->response->statusCode('400');
-                        $data = [
-                            'message' => 'token expired.',
-                            'error' => true
-                        ];
                     }
                 } else {
                     $this->response->statusCode('400');
                     $data = [
-                        'message' => 'token not valid.',
+                        'message' => 'token expired.',
                         'error' => true
                     ];
                 }
@@ -164,7 +156,7 @@ class AccountController extends AppController
         } else {
             $this->response->statusCode('400');
             $data = [
-                'message' => 'user not valid.',
+                'message' => 'user not valid',
                 'error' => true
             ];
         }
