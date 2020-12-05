@@ -121,8 +121,6 @@ class AccountController extends AppController
             if ($token) {
                 if (password_verify($tokenCode, $token->token)) {
                     if ($Tokens->delete($token)) {
-                        var_dump($token);
-                        die;
                         $user->password = $password;
                         if ($Users->save($user)) {
                             $this->createLog("Senha do usuário " . $this->Auth->user('name') . " foi trocada com sucesso");
