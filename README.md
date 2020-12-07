@@ -43,18 +43,48 @@ sudo apt-get install php-mysql
 Para usar Gerenciador pericial, estas são as opções:
 * Abra o navegador e digite o endereço explicitado pelo seu servidor.
 * Ao abrir a aplicação você poderá:
-  * TESTE TESTE TESTE TESTE
+  * Se cadastrar;
+  * Fazer login;
+  * Recuperar senha perdida;
+  * Editar perfil;
+  * Alterar foto de perfíl;
+  * Confirmar e-mail cadastrado;
+  * Autorizar usuário (Administrador);
+  * Desativar um usuário (Administrador);
+  * Ativar um usuário (Administrador);
+  * Ver todos os usuários cadastrados no sistema;
+  * Cadastrar requisições de perícia;
+  * Cadastrar laudos encima dessas requisições;
+  * listar todas as requisições;
+  * listar todos os laudos;
+  * Editar quantas vezes quiser essas requisições;
+  * Editar quantas vezes quiser os laudos;
+  * Enviar documentos para as requisições;
+  * Visualizar detalhadamente cada requisição;
+  * Cadastrar veículos nas requisições;
+  * Cadastrar vítimas nas requisições;
+  * Distribuir requisições automáticas para os peritos, baseado em uma lógica;
+  * Visualizar quais requisições foram distribuidas para seu usuário.
+  * Ver relatórios de logs de alterações (Administrador);
+  * Ver análise dos peritos;
+  * Ver estatística dos tipos de exames;
+ 
 
 ## Evolução da Aplicação
 * Primeira Sprint
     * Base inicial
+        * Todo sistema de login;
+        * Alteração de senha;
+        * Acesso ao sistema;
+        * Autorização do sistema;
+* Segunda sprint
+    *
 
 ## Contribuidores
 
 As seguintes pessoas contribuiram para este projeto:
 
 * Igor Galvan (https://github.com/igorbgalvan)
-* Jefferson Henrique (https://github.com/JeffHenriqueM)
 
 ## Licença de uso
 
