@@ -40,7 +40,7 @@ class LogsController extends AppController
                 'order' => ['created' => 'desc'],
             ];
             if ($search != null)
-                $logs = $this->paginate($this->Logs->find('all')->where(['OR' => [['message like' => "%" . $search . "%"], ['date(created) like' => "%" . $search . "%"]]]));
+                $logs = $this->paginate($this->Logs->find('all')->where(['OR' => [['message like' => "%" . $search . "%"], ['DATE_FORMAT(created,"%d/%m/%Y") like' => "%" . $search . "%"]]]));
             else
                 $logs = $this->paginate($this->Logs);
 
