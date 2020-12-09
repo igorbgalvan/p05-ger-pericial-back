@@ -40,11 +40,11 @@ class LogsController extends AppController
                 'order' => ['created' => 'desc'],
             ];
             if ($search != null)
-                $logs = $this->paginate($this->Logs->find('all')->where(['OR' => [['message like' => "%" . $search . "%"]]]));
+                $logs = $this->paginate($this->Logs->find('all')->where(['OR' => [['message like' => "%" . $search . "%"], ['created like' => "%" . $search . "%"]]]));
             else
                 $logs = $this->paginate($this->Logs);
 
-//'created like' => "%" . $search . "%"
+//
             $this->response->statusCode('200');
             $data = ['logs' => $logs, 'error' => false, 'code' => '200'];
         } else {
